@@ -20,4 +20,8 @@ songs = dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['recor
 for song in songs:
     print(song)
 
-dunya.hindustani.download_mp3('41e85340-5071-4cdf-a988-6e0aabed3dd6', './recordings')
+# dunya.hindustani.download_mp3('41e85340-5071-4cdf-a988-6e0aabed3dd6', './recordings')
+
+print(dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['aliases'])
+
+print(dunya.hindustani.get_recording('41e85340-5071-4cdf-a988-6e0aabed3dd6'))

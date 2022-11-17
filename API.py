@@ -8,20 +8,30 @@ print("Token set successfully")
 
 raags = dunya.hindustani.get_raags()
 
-#print(raags)
+if False:
+    print(raags)
 
-for i in range(len(raags)):
-    print(raags[i])
+    for i in range(len(raags)):
+        print(raags[i])
 
-print("Information has been retrieved!")
+    print("Information has been retrieved!")
 
-print(dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898').keys())
-songs = dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['recordings']
-for song in songs:
-    print(song)
+    print(dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898').keys())
+    songs = dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['recordings']
+    for song in songs:
+        print(song)
 
-# dunya.hindustani.download_mp3('41e85340-5071-4cdf-a988-6e0aabed3dd6', './recordings')
+    dunya.hindustani.download_mp3('41e85340-5071-4cdf-a988-6e0aabed3dd6', './recordings')
 
-print(dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['aliases'])
+    print(dunya.hindustani.get_raag('d9c603fa-875f-4b84-b851-c6a345427898')['aliases'])
 
-print(dunya.hindustani.get_recording('41e85340-5071-4cdf-a988-6e0aabed3dd6'))
+    print(dunya.hindustani.get_recording('41e85340-5071-4cdf-a988-6e0aabed3dd6'))
+
+print("=" * 50)
+
+# Use generator to search for a specific raag by common name
+Bageshree = next(item for item in raags if item["common_name"] == "Bageshree")
+Bageshree_recordings =  dunya.hindustani.get_raag(Bageshree['uuid'])['recordings']
+for i, recording in enumerate(Bageshree_recordings):
+    time = dunya.hindustani.get_recording(recording['mbid'])['length']
+    print(f"{i}: {round(time/1000/60, 2)} - {recording['title']}")

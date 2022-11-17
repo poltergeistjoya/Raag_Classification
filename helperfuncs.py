@@ -3,6 +3,8 @@ import librosa
 import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
+import tfio
 
 from os import path
 from pydub import AudioSegment
@@ -35,6 +37,19 @@ def plot_spec(D, sr, instrument):
     spec = librosa.display.specshow(D, sr=sr, x_axis='time', y_axis='linear', ax=ax)
     ax.set(title = 'Spectrogram of ' + instrument)
     fig.colorbar(spec)
+
+def load_wav_16k_mono(filename):
+    """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
+    file_contents = tf.io.read_file(filename)
+    wav, sample_rate = tf.audio.decode_wav(
+          file_contents,
+          desired_channels = 1 # skip second channel
+    )
+    wav = tf.squeeze(wav, axis=-1)
+    sample_rate = tf.cast(sample_rate, dtype=tf.int64)
+    wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out=16000)
+    return wav
+
 
 def main():
     raags= ['recordings/Abhogee', 'recordings/Bhageshri', 'recordings/Bhoop/', 'recordings/Bhairav/']

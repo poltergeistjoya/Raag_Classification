@@ -1,5 +1,3 @@
-print("hello Workd")
-
 from compmusic import dunya
 
 print("Package imported successfully")
@@ -30,8 +28,12 @@ if False:
 print("=" * 50)
 
 # Use generator to search for a specific raag by common name
-Bageshree = next(item for item in raags if item["common_name"] == "Bageshree")
-Bageshree_recordings =  dunya.hindustani.get_raag(Bageshree['uuid'])['recordings']
-for i, recording in enumerate(Bageshree_recordings):
-    time = dunya.hindustani.get_recording(recording['mbid'])['length']
-    print(f"{i}: {round(time/1000/60, 2)} - {recording['title']}")
+def query_raga(common_name = 'Bageshree'):
+    '''Uses a ragas common name to display all of it's recordings and their durations in minutes'''
+    raga = next(item for item in raags if item["common_name"] == common_name)
+    raga_recordings =  dunya.hindustani.get_raag(raga['uuid'])['recordings']
+    for i, recording in enumerate(raga_recordings):
+        time = dunya.hindustani.get_recording(recording['mbid'])['length']
+        print(f"{i}: {round(time/1000/60, 2)} - {recording['title']}")
+
+query_raga()

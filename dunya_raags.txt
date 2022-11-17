@@ -1,0 +1,207 @@
+hello Workd
+Package imported successfully
+Token set successfully
+{'uuid': 'd9c603fa-875f-4b84-b851-c6a345427898', 'common_name': 'Abhogi', 'name': 'Ābhōgī'}
+{'uuid': '40ebda55-a01a-4e03-be12-26e7e8239f8d', 'common_name': 'Adana', 'name': 'Adānā'}
+{'uuid': '34709b07-06bf-4135-aaae-8bf8b6efd7e8', 'common_name': 'Adana malhar', 'name': 'Adānā malhār'}
+{'uuid': 'f6432fec-e9c2-4b09-9e73-c46086cbd8ea', 'common_name': 'Ahir bhairav', 'name': 'Ahira bhairav'}
+{'uuid': 'c74945a4-bc4a-4c34-92f5-8888e5ed3519', 'common_name': 'Ahir lalat', 'name': 'Ahir lalit'}
+{'uuid': '030012bd-275b-465a-88b9-dc9553fd14d2', 'common_name': 'Ahiri todi', 'name': 'Ahiri tōḍī'}
+{'uuid': '2ed9379f-14c9-49af-8e4d-f9b63e96801f', 'common_name': 'Alahiya bilawal', 'name': 'Alahaiyā bilāval'}
+{'uuid': '91bde85b-5ebd-44b3-8ffb-fd1acc8a14f6', 'common_name': 'Ambika', 'name': 'Ambikā'}
+{'uuid': 'a20bf6cd-baa6-407a-a276-89ff3a2e4472', 'common_name': 'Amrit varshini', 'name': 'Amr̥t varṣiṇi'}
+{'uuid': '6df8b8ad-3f60-4f08-9663-b7efb3dd7fb6', 'common_name': 'Anand malhar', 'name': 'Ānand malhār'}
+{'uuid': 'e6ba5bbe-43b7-4a60-ba46-9f605ad19820', 'common_name': 'Arabhi', 'name': 'Ārabhi'}
+{'uuid': 'f3a102a6-7403-4e1c-a628-2c9944aff276', 'common_name': 'Asa mand', 'name': 'Asā māṇḍ'}
+{'uuid': 'ef934f51-574a-4062-8cba-3741c50e27cc', 'common_name': 'Ashta raga malika', 'name': 'Aṣṭa rāg mālikā'}
+{'uuid': '7591faad-e68a-4550-b675-8082842c6056', 'common_name': 'Bageshree', 'name': 'Bāgēśrī'}
+{'uuid': '164c7ead-32a7-4184-85d3-a26a71c6b9b9', 'common_name': 'Bahaduri todi', 'name': 'Bahādurī tōḍī'}
+{'uuid': '5688eac9-1196-4baf-ba57-c96bab414022', 'common_name': 'Bahar', 'name': 'Bahār'}
+{'uuid': 'b143adaa-f1a6-4de4-8985-a5bd35e96279', 'common_name': 'Bairagi', 'name': 'Bairāgi'}
+{'uuid': 'ecd04ceb-b46c-47fc-9045-84ac9160e527', 'common_name': 'Basant', 'name': 'Basant'}
+{'uuid': '26e43b26-86b2-49e5-b6fe-9c45112493c5', 'common_name': 'Basant bahar', 'name': 'Basant bahār'}
+{'uuid': '996d8e0a-50bd-432b-af7a-29d718f2db45', 'common_name': 'Basant mukhari', 'name': 'Basant mukhāri'}
+{'uuid': '91cae195-e93a-4c6f-9b34-e898d0444d9e', 'common_name': 'Basanti kedar', 'name': 'Basantī kēdār'}
+{'uuid': 'bc3aa05b-078e-43f7-b54f-0a6b56729225', 'common_name': 'Beehad bairav', 'name': 'Bīhād bhairav'}
+{'uuid': 'e6710c21-4b6c-413d-abb5-2146bad52b9d', 'common_name': 'Bhairabi', 'name': 'Bhairavi'}
+{'uuid': '1e7de02f-e77f-405a-a033-f31117aaf955', 'common_name': 'Bhairav', 'name': 'Bhairav'}
+{'uuid': '7b2e0d10-2d64-435b-9624-3990a81aa9a8', 'common_name': 'Bhairav bahar', 'name': 'Bhairav bahār'}
+{'uuid': '95dad5c5-8d27-4be8-a37d-86ddd0ccb2af', 'common_name': 'Bhatiyar', 'name': 'Bhāṭiyār'}
+{'uuid': 'fcb1a1f9-70ae-4524-a64a-dad41a0f6d53', 'common_name': 'Bhavmat bhairav', 'name': 'Bhavamat bhairav'}
+{'uuid': 'b30ae272-b01a-40af-970c-8f42a6232f97', 'common_name': 'Bheem', 'name': 'Bhīm'}
+{'uuid': '24a85738-02e8-4b0e-9098-926f57c19a50', 'common_name': 'Bhimpalas', 'name': 'Bhimapalās'}
+{'uuid': 'e771a74d-545d-41d5-816b-43403a818b0c', 'common_name': 'Bhoop', 'name': 'Bhūp'}
+{'uuid': 'ba55fe89-1369-4966-8645-e29cf1eb3f43', 'common_name': 'Bhupal todi', 'name': 'Bhōpālī tōḍī'}
+{'uuid': '179a85b3-ab72-4316-96e5-4e9e408639d7', 'common_name': 'Bibhas', 'name': 'Bibhās'}
+{'uuid': 'a7d98897-e2fe-4d75-b9dc-e5b4dc88e1c6', 'common_name': 'Bihag', 'name': 'Bihāg'}
+{'uuid': '83b41231-5d8d-45ae-8d54-bdbd262666f1', 'common_name': 'Bihagda', 'name': 'Bihāgdā'}
+{'uuid': 'dd59147d-8775-44ff-a36b-0d9f15b31319', 'common_name': 'Bilaskhani todi', 'name': 'Bilāsakhānī tōḍī'}
+{'uuid': 'debe84d7-557f-4e7a-8983-85108e26f48c', 'common_name': 'Binna shadja', 'name': 'Bhinna ṣaḍja'}
+{'uuid': '886b43c6-3fdd-4f92-bf5a-2e1303308ee5', 'common_name': 'Brindavani sarang', 'name': 'Br̥ndāvanī sāraṅg'}
+{'uuid': '42ef0bb4-bd24-43c6-8bab-0cb2300f67d9', 'common_name': 'Champak', 'name': 'Campak'}
+{'uuid': '0d1a30a9-6424-417a-a153-75a1a8264f02', 'common_name': 'Champakali', 'name': 'Campākali'}
+{'uuid': 'cdf0fb50-f069-42ac-baf9-32c574e3a2c6', 'common_name': 'Chandani kedar', 'name': 'Cāndanī kēdār'}
+{'uuid': '4c2fc9cf-7f02-4afb-a60e-cf9f7c12f2ae', 'common_name': 'Chandrakauns', 'name': 'Candrakauns'}
+{'uuid': '6fd780c4-75e8-4223-8c1a-8d39ee977e0a', 'common_name': 'Chandramauli', 'name': 'Candramauli'}
+{'uuid': 'd64fc96b-3eee-4706-9813-3c990991bd89', 'common_name': 'Charukeshi', 'name': 'Cārukēśi'}
+{'uuid': '5a59b63a-153a-4da9-9f34-9e233062726e', 'common_name': 'Chaya malhar', 'name': 'Chāyā malhār'}
+{'uuid': '671e87a1-d6f5-4b3d-867f-af7117a4068e', 'common_name': 'Chhaya nat', 'name': 'Chāyānāt'}
+{'uuid': '118401e7-8de8-4d81-9d8e-8070889e3fa8', 'common_name': 'Darbari', 'name': 'Darbāri'}
+{'uuid': '6a23794c-c36c-46a5-90a6-46e85451d3cf', 'common_name': 'Darbari todi', 'name': 'Darbārī tōḍī'}
+{'uuid': '6d085bff-124f-46cb-8a4b-a3151a6d35b4', 'common_name': 'Deepawali', 'name': 'Dīpāvali'}
+{'uuid': '62b79291-73b0-4c77-a353-0f8bc6ed8362', 'common_name': 'Des', 'name': 'Dēś'}
+{'uuid': 'c8d5b1ed-3c68-4fb8-8d25-075e9ada76ba', 'common_name': 'Deshkar', 'name': 'Dēśakār'}
+{'uuid': '96ef352a-9baf-4ba9-a628-9cabb59b2175', 'common_name': 'Desi', 'name': 'Dēsi'}
+{'uuid': '48713f7f-e653-42a0-9e5f-8278ba71662d', 'common_name': 'Dev gandhar', 'name': 'Dēv gāndhār'}
+{'uuid': '6aa9fb11-23f9-4a53-9e0c-302fdfc82bd3', 'common_name': 'Devgiri bilawal', 'name': 'Dēvgirī bilāval'}
+{'uuid': '127b87c3-aa50-4a1a-a403-638f7a61cc1c', 'common_name': 'Dhanashree', 'name': 'Dhanaśrī'}
+{'uuid': '23511a96-eb43-4d9c-ad70-491d356071b6', 'common_name': 'Dhani', 'name': 'Dhanī'}
+{'uuid': '2af4fcd2-386f-415b-909c-6587f97f455b', 'common_name': 'Din ki puriya', 'name': 'Din kī puriyā'}
+{'uuid': '186f8cad-2fa7-4e94-ad95-a9495abf011e', 'common_name': 'Durga', 'name': 'Durgā'}
+{'uuid': '44c41615-af55-4b3d-8582-6374222c1b24', 'common_name': 'Ek nishad bihagda', 'name': 'Ēk niṣād bihāgḍā'}
+{'uuid': '6517808a-a211-45cb-b802-f49341ea2b1a', 'common_name': 'Gandhi malhar', 'name': 'Gāndhī malhār'}
+{'uuid': 'ba3242d0-8d40-4d93-865e-d2e2497ea2a8', 'common_name': 'Gaud malhar', 'name': 'Gauḍ malhār'}
+{'uuid': '45f64000-9441-4a09-b4c0-34eb18534e87', 'common_name': 'Gaud sarang', 'name': 'Gauḍ sāraṅg'}
+{'uuid': '0e170dd7-1006-40ea-b8ce-18f406a09b58', 'common_name': 'Gauri', 'name': 'Gaurī'}
+{'uuid': 'c10c2182-18a2-4172-9172-e5767b42bee5', 'common_name': 'Gauri basant', 'name': 'Gaurī basant'}
+{'uuid': 'd683a48e-aa43-4784-bf1b-a30bc0b59344', 'common_name': 'Gorakh kalyan', 'name': 'Gōrākh kalyāṇ'}
+{'uuid': '30577ddb-8916-45b0-b789-2bc8dcd201a0', 'common_name': 'Gunakri', 'name': 'Guṇakārī'}
+{'uuid': 'dd85de6c-330a-490a-a5af-a0ecd7893671', 'common_name': 'Gurjari todi', 'name': 'Gurjarī tōḍī'}
+{'uuid': '0e57e441-ccee-4df2-9874-949a653714ef', 'common_name': 'Hameer', 'name': 'Hamīr'}
+{'uuid': '595de771-fcc2-414c-9df6-ae4ffd898549', 'common_name': 'Hamsadhvani', 'name': 'Hamsadhvāni'}
+{'uuid': 'a66a01dc-d4a3-4c93-bd44-b64aa85a8d8e', 'common_name': 'Hansnarayini', 'name': 'Hamsanārāyaṇi'}
+{'uuid': 'ad3dde0a-cab6-4e15-a9e8-582cf8e080e6', 'common_name': 'Hem bihag', 'name': 'Hēm bihāg'}
+{'uuid': '43ee8727-a0d3-43f0-aac5-1be1cb772378', 'common_name': 'Hem lalit', 'name': 'Hēm lalit'}
+{'uuid': '8a5c3fca-dbc5-4af5-a3db-08d206e16a4a', 'common_name': 'Hemavanti', 'name': 'Hēmāvānti'}
+{'uuid': 'b5e5b83c-42b1-4b84-9238-248cde42c77d', 'common_name': 'Hindol', 'name': 'Hindōl'}
+{'uuid': 'f2d50f2b-75be-4c52-a2c9-2532650f106b', 'common_name': 'Husseini kanada', 'name': 'Husaini'}
+{'uuid': '3ab135e0-a5e9-4313-9a11-f7dcc6b48a9f', 'common_name': 'Jaijaivanti', 'name': 'Jaijaivanti'}
+{'uuid': '80f3ec4b-d9db-4bc3-8186-9e6b0581f31a', 'common_name': 'Jaunpuri', 'name': 'Jaunpuri'}
+{'uuid': '868bcf93-4178-4778-a559-c3f443649054', 'common_name': 'Jayawanti todi', 'name': 'Jayavantī tōḍī'}
+{'uuid': '6bd3a50c-4f46-4117-9959-30ff7796e95a', 'common_name': 'Jhinjhat manj', 'name': 'Jhinjhaṭ mān̄j'}
+{'uuid': '6bb47138-6448-4828-bf5f-7a466d94484e', 'common_name': 'Jhinjhoti', 'name': 'Jhinjhōṭi'}
+{'uuid': '063ea5a0-23b1-4bb5-8537-3d924fe8ebb3', 'common_name': 'Jog', 'name': 'Jōg'}
+{'uuid': '747969d2-97d9-4acf-82cb-8811171ddef9', 'common_name': 'Jogia', 'name': 'Jōgiyā'}
+{'uuid': '2db7495a-98a8-459f-8d53-0e475dbfe597', 'common_name': 'Jogia asawari', 'name': 'Jōgiyā asavāri'}
+{'uuid': '0f0d242d-3c2c-4e06-b3a4-6ff8001d1c22', 'common_name': 'Jogkauns', 'name': 'Jōgkauns'}
+{'uuid': '440a66d3-b236-4eb4-9e5e-3b53bc0c5402', 'common_name': 'Kafi', 'name': 'Kāphī'}
+{'uuid': '51ee2513-1a2c-4ae8-abc5-8cff72c2e4a1', 'common_name': 'Kalashree', 'name': 'Kalāśrī'}
+{'uuid': '7c9ab484-a912-4b8e-b421-5751f9b1e104', 'common_name': 'Kalavati', 'name': 'Kalāvati'}
+{'uuid': 'fd01b618-a48a-4a29-9a2d-8d494cdc3350', 'common_name': 'Kalyan', 'name': 'Kalyāṇ'}
+{'uuid': 'c344b820-ba4e-4db7-ba28-33d2e7f1d376', 'common_name': 'Kalyani', 'name': 'Kalyāṇi'}
+{'uuid': '88965a41-957a-42d3-a8da-80a27e797c09', 'common_name': 'Kambhoji', 'name': 'Kāmbhōji'}
+{'uuid': '1170fa33-ee31-4ce7-9c73-aa6ae4b034c2', 'common_name': 'Kamodvanti', 'name': 'Kāmōdvanti'}
+{'uuid': 'f011a874-2785-4873-b194-e1a29115bc58', 'common_name': 'Kanada', 'name': 'Kānaḍā'}
+{'uuid': '2fe9f79c-7955-4dcd-939a-e0a73173c07f', 'common_name': 'Kaunsi kanara', 'name': 'Kaunsī kānaḍā'}
+{'uuid': 'c2de0c9b-8bd5-4090-b248-100d5c98c4b8', 'common_name': 'Kaushi dhwani', 'name': 'Kauśik dhvani'}
+{'uuid': 'a9ee554f-f146-43e9-b2d0-9bb31fd4b57d', 'common_name': 'Kedar', 'name': 'Kēdār'}
+{'uuid': '93c73081-bdf8-4eca-b325-d736b71e9b4b', 'common_name': 'Khamaj', 'name': 'Khamāj'}
+{'uuid': '3c91af88-efc9-45c6-8768-d5c05567315e', 'common_name': 'Khamaj bahar', 'name': 'Khamāj bahār'}
+{'uuid': '914ea213-6fec-49fc-826f-b9351b3452cd', 'common_name': 'Khambawati', 'name': 'Khambāvati'}
+{'uuid': 'a8903336-4768-4633-9957-1a2517b2c7a7', 'common_name': 'Khat', 'name': 'Khaṭa'}
+{'uuid': 'aad22288-2d33-4afd-be76-1690b42dc9e2', 'common_name': 'Kirwani', 'name': 'Kīravāṇi'}
+{'uuid': '410c8cc9-4432-4576-a5b6-f9830575a0e3', 'common_name': 'Komal rishabh asavari', 'name': 'Kōmal riṣabh asāvēri'}
+{'uuid': '77463b6c-34c5-4401-bb4f-46d4766d55f3', 'common_name': 'Kuntanavarali', 'name': 'Kuntavarāli'}
+{'uuid': 'a99e07d5-20a0-467b-8dcd-aa5a095177fd', 'common_name': 'Lalat', 'name': 'Lalit'}
+{'uuid': 'b6d8ec87-66be-4c91-98a2-ebb3ea840d55', 'common_name': 'Lalit bhatiyar', 'name': 'Lalit bhaṭiyār'}
+{'uuid': '7a2f147b-5914-44bf-afb4-745631f1fe11', 'common_name': 'Lalit pancham', 'name': 'Lalit pañcam'}
+{'uuid': '06981972-c459-4ff1-9cf4-53bda6c7fefa', 'common_name': 'Lalit vibhas', 'name': 'Lalit bibhās'}
+{'uuid': '01e7523a-08d1-439a-ac48-b1987f8c2bc0', 'common_name': 'Lankeshri', 'name': 'Laṅkēśrī'}
+{'uuid': 'c498ccc8-1f4a-4ac2-a96f-3b06b1f583b2', 'common_name': 'Maajh khamaj', 'name': 'Mājh khamāj'}
+{'uuid': 'd5a2c271-f142-4d0c-a958-66678e5bc624', 'common_name': 'Madhmad sarang', 'name': 'Madhmad sāraṅg'}
+{'uuid': '0b3bbf97-0ec3-41da-add4-722d87329ec3', 'common_name': 'Madhukauns', 'name': 'Madhukauns'}
+{'uuid': '290674e0-d94c-41c1-ad99-f65fa22a1447', 'common_name': 'Madhuvanti', 'name': 'Madhuvanti'}
+{'uuid': '60f33739-a3ef-421e-ad8a-fc8cea259a7b', 'common_name': 'Malav', 'name': 'Mālava'}
+{'uuid': 'efa2476e-40ad-43eb-a746-07918af7c567', 'common_name': 'Malavati', 'name': 'Mālāvati'}
+{'uuid': '64e5fb9e-5569-4e80-8e6c-f543af9469c7', 'common_name': 'Malkauns', 'name': 'Mālkauns'}
+{'uuid': '7e9ac165-68bd-4e6d-b1c0-b8d2f18ce3c3', 'common_name': 'Mangal bhairav', 'name': 'Maṅgal bhairav'}
+{'uuid': '54c4214c-05b9-4acc-8f77-6d5786e43a2e', 'common_name': 'Marubihag', 'name': 'Mārūbihāg'}
+{'uuid': '3eb7ba30-4b94-432e-9618-875ee57e01ab', 'common_name': 'Marwa', 'name': 'Mārvā'}
+{'uuid': '0437cc3e-6e02-491f-aa9b-5b4e1fec8993', 'common_name': 'Marwashri marwa', 'name': 'Mārvāśrī mārvā'}
+{'uuid': '86599528-c95a-441d-82dc-eb3ec5657045', 'common_name': 'Meera malhar', 'name': 'Mīrā malhār'}
+{'uuid': 'cd0f0430-a499-4f38-8d50-adf3435cf1e3', 'common_name': 'Megh', 'name': 'Mēgh'}
+{'uuid': '7acd42d8-e5ad-4cff-9a1f-61157eafb10b', 'common_name': 'Megh malhar', 'name': 'Mēgh malahār'}
+{'uuid': 'd205eaa9-079e-4e0f-8ae4-8db8ae231c12', 'common_name': 'Mishra gaara', 'name': 'Miśra gārā'}
+{'uuid': '97af40c5-8537-4128-a18f-fe10d8aebdf0', 'common_name': 'Mishra kalingada', 'name': 'Miśra kaliṅgaḍā'}
+{'uuid': '1ec5f9ec-7320-4beb-9469-18bf69655645', 'common_name': 'Mishra maand', 'name': 'Miśra māṇḍ'}
+{'uuid': 'eedc8258-2270-4da4-b7a6-388c842ae77a', 'common_name': 'Mishra piloo', 'name': 'Miśra pīlū'}
+{'uuid': '1b05a564-059f-445b-b325-cf26318367e3', 'common_name': 'Miya malhar', 'name': 'Miyām̐ malhār'}
+{'uuid': '0bfd3d74-10b9-4b15-96e9-f751c7907244', 'common_name': 'Miyan ki sarang', 'name': 'Miyām̐ kī sāraṅg'}
+{'uuid': 'd3be1a2a-ad82-495b-b738-b5e3dd664a0c', 'common_name': 'Multani', 'name': 'Multāni'}
+{'uuid': '3a1f7310-4842-46cc-a254-6075be15f3c0', 'common_name': 'Nagad', 'name': 'Nagaḍ'}
+{'uuid': 'a3f2513c-37ac-4148-b3b8-712d45c74b79', 'common_name': 'Nanad', 'name': 'Nanād'}
+{'uuid': '9571385f-2743-41a1-9c6d-3db0545a6773', 'common_name': 'Nat bhairav', 'name': 'Naṭ bhairav'}
+{'uuid': '3b32032b-1548-4e87-9541-4ad13c5ccdb5', 'common_name': 'Nat bihag', 'name': 'Naṭ bihāg'}
+{'uuid': '9590981c-79ce-4499-bd03-ea88621dbd6e', 'common_name': 'Nat malhar', 'name': 'Naṭ malhār'}
+{'uuid': 'a919c7ac-fec2-4102-ab29-01d212ba8a3e', 'common_name': 'Nat narayan', 'name': 'Naṭ nārāyaṇ'}
+{'uuid': '9c75535f-452c-44de-a543-beeb7aefcc2c', 'common_name': 'Nayaki kanada', 'name': 'Nāyakī kānaḍā'}
+{'uuid': 'e49d53cb-3378-4074-bdc5-0c17b672f5e1', 'common_name': 'Nilambari', 'name': 'Nīlāmbari'}
+{'uuid': 'bafb1d3a-0fff-4fba-bc2e-f9ba766b2e33', 'common_name': 'Pahadi', 'name': 'Pahāḍi'}
+{'uuid': '109d438b-8400-4246-bc0f-d02f280dd526', 'common_name': 'Pancham', 'name': 'Pañcam'}
+{'uuid': 'd0edf94d-8c79-4bb9-b947-04fd37c0bdbe', 'common_name': 'Paraj', 'name': 'Paraj'}
+{'uuid': 'ac5c462b-78d4-4187-a512-6d8f3501b3db', 'common_name': 'Patdeep', 'name': 'Paṭdīp'}
+{'uuid': '84488ca3-b7ff-454f-90dc-5d720c0ce7ea', 'common_name': 'Patmanjari', 'name': 'Paṭaman̄jari'}
+{'uuid': '809b91a2-a923-4983-a85f-5eed6293b68f', 'common_name': 'Poorvi', 'name': 'Pūrvi'}
+{'uuid': '18eaa693-173b-4cb4-9560-a1aa2844e346', 'common_name': 'Pratapvarali', 'name': 'Pratāpavarāli'}
+{'uuid': '774ae631-eb8d-4b8e-9edd-5285e919821f', 'common_name': 'Puriya', 'name': 'Puriyā'}
+{'uuid': 'fa28470c-d413-44c7-94da-181f530cbfdd', 'common_name': 'Puriya dhanashree', 'name': 'Puriyā dhanaśrī'}
+{'uuid': 'ff4e1817-44b2-4cac-ac98-189b280881e7', 'common_name': 'Puriya kalyan', 'name': 'Puriyā kalyāṇ'}
+{'uuid': 'f7fddfc0-8c1d-4dd2-90d5-5d51a99d61f8', 'common_name': 'Rageshri', 'name': 'Rāgēśrī'}
+{'uuid': 'eb2571c8-f67e-4686-b6d5-70cf2a14a8f6', 'common_name': 'Raj kalyan', 'name': 'Rāj kalyāṇ'}
+{'uuid': '91d1601a-bffc-44ce-b862-e8e5cb7ba8db', 'common_name': 'Ramdasi malhar', 'name': 'Rāmdāsī malhār'}
+{'uuid': 'b1bbc0f0-7377-463b-b309-524ee8d4f37d', 'common_name': 'Ramkali', 'name': 'Rāmakali'}
+{'uuid': '05901cff-7b10-4551-9b3a-f59fb4a9ef46', 'common_name': 'Saavani', 'name': 'Sāvanī'}
+{'uuid': '277d7cbf-a23d-40a5-a454-34fe6abbe78c', 'common_name': 'Saheli todi', 'name': 'Sahēlī tōḍī'}
+{'uuid': 'c0a00a39-71a7-4517-8dce-4ace474d487a', 'common_name': 'Sampurna malkauns', 'name': 'Sampūrṇa mālkauns'}
+{'uuid': '532d0f11-4c6f-4e39-b240-632b118d04e5', 'common_name': 'Sanjari', 'name': 'San̄jari'}
+{'uuid': '76d78166-b165-4035-9379-41b2535bc632', 'common_name': 'Sarang', 'name': 'Sāraṅg'}
+{'uuid': '81b63c29-8e30-4de6-b929-a4ba060a1cf6', 'common_name': 'Saraswati', 'name': 'Sarasvati'}
+{'uuid': 'abbbc4eb-1079-4471-960a-c5a65ff3c151', 'common_name': 'Savani bihag', 'name': 'Sāvanī bihāg'}
+{'uuid': 'ff344e58-85dd-4776-bf5f-5f751f4d588d', 'common_name': 'Shahana', 'name': 'Sahanā'}
+{'uuid': '66238fd5-3d04-4303-b865-b3d038dd293a', 'common_name': 'Shankara', 'name': 'Śaṅkara'}
+{'uuid': '560949b9-92bf-4e30-883d-c8f94834debb', 'common_name': 'Shimhendra madhyamam', 'name': 'Simhēndra madhyamaṁ'}
+{'uuid': '1ec2b0a8-fdbd-43b2-8cab-c3199a644dfb', 'common_name': 'Shivaranjani', 'name': 'Śivaran̄jani'}
+{'uuid': 'b8cdde9e-a31e-4537-a0fe-cccd76cfb9ce', 'common_name': 'Shivmat bhairav', 'name': 'Śivamat bhairav'}
+{'uuid': '46997b02-f09c-4969-8138-4e1861f61967', 'common_name': 'Shree', 'name': 'Śrī'}
+{'uuid': '40dbe1db-858f-4366-bef8-9076eb67340d', 'common_name': 'Shuddh sarang', 'name': 'Śuddh sāraṅg'}
+{'uuid': 'fc39cd87-6396-44e5-be57-7d25f6144589', 'common_name': 'Shuddha kalyan', 'name': 'Śuddh kalyāṇ'}
+{'uuid': '9d20fe47-eeb4-4361-bcf2-35bab1b52a67', 'common_name': 'Shuddha nat', 'name': 'Śuddh naṭa'}
+{'uuid': 'ea5e88cb-3c3c-49b6-a2d3-3801ce2cdabc', 'common_name': 'Shudh baradi', 'name': 'Śuddh baradi'}
+{'uuid': '007a5094-e226-41d0-b626-0f938f7e67e0', 'common_name': 'Shudh maaru', 'name': 'Śuddh mārū'}
+{'uuid': 'f95072ad-729d-49b7-8ec0-c5be64337395', 'common_name': 'Shudha basant', 'name': 'Śuddh basant'}
+{'uuid': 'cadee83a-6aaa-404c-8a68-1250dc62d320', 'common_name': 'Shyam kalyan', 'name': 'Śyām kalyāṇ'}
+{'uuid': '7fad8e4e-8ba2-402d-9d01-6586acc5b458', 'common_name': 'Sindhu bhairavi', 'name': 'Sindhu bhairavi'}
+{'uuid': '7e1db214-c0f2-4e68-b748-35ea464c1b39', 'common_name': 'Sindhura', 'name': 'Sindhūra'}
+{'uuid': '3b18e6fe-5ea0-4326-8d3d-c1fbcbe1cc9e', 'common_name': 'Sohini', 'name': 'Sōhinī'}
+{'uuid': '7f8cd8d5-6dba-40f9-8f26-0c9fff6da3e2', 'common_name': 'Sohini bahar', 'name': 'Sōhinī bahār'}
+{'uuid': '76497571-61e8-4f5a-9e26-b52715be9fd1', 'common_name': 'Sohoni bhatiyar', 'name': 'Sōhōnī bhaṭiyār'}
+{'uuid': '72420351-7aa7-4118-9fc1-ed60de170172', 'common_name': 'Sorath', 'name': 'Sōrath'}
+{'uuid': 'f132c2f3-90f9-4dd3-bcb2-b6f95fd234b8', 'common_name': 'Subhalakshmi', 'name': 'Śubhalakṣmi'}
+{'uuid': '3800077c-9fd5-46e8-ab7b-d86955a864f1', 'common_name': 'Sughrai', 'name': 'Sugharaī'}
+{'uuid': 'faa182a5-687f-4c12-8ef7-616c537e10b0', 'common_name': 'Suha', 'name': 'Suhā'}
+{'uuid': '17a7b583-71b9-4d75-a881-7dd5d2627b37', 'common_name': 'Suha sugharai', 'name': 'Sur sugharai'}
+{'uuid': '6bb4b24a-deb0-4a47-b99a-094ca9605d45', 'common_name': 'Surmalhar', 'name': 'Sur malhār'}
+{'uuid': 'd7ebeced-2c40-4188-9556-907392a9df9b', 'common_name': 'Swarashtram', 'name': 'Saurāṣṭram'}
+{'uuid': '214aa9c2-b69b-4431-aaa4-1ad935e54334', 'common_name': 'Tankeshri', 'name': 'Tankēśrī'}
+{'uuid': '45528063-4723-4522-8a8c-e5b1da747112', 'common_name': 'Tilak bihari', 'name': 'Tilak bihārī'}
+{'uuid': 'd2af8f3e-85ee-40c3-9db3-6cf417d50515', 'common_name': 'Tilak kamod', 'name': 'Tilak kāmōd'}
+{'uuid': '8ea56aaa-576b-4c33-ab0a-a4699877d1a6', 'common_name': 'Tilak nat', 'name': 'Tilak naṭ'}
+{'uuid': 'a4e2a9c3-2a9d-420e-8619-d6e6419fa882', 'common_name': 'Tilang', 'name': 'Tilāṅg'}
+{'uuid': '6f13484e-6fdd-402d-baf3-3835835454d0', 'common_name': 'Todi', 'name': 'Tōḍī'}
+{'uuid': '27b5ec64-1c40-41f6-8324-023bc54fd90d', 'common_name': 'Triveni gauri', 'name': 'Trivēṇī gauri'}
+{'uuid': '0481235e-b295-451c-94d0-099633c0e471', 'common_name': 'Vachaspati', 'name': 'Vācaspati'}
+{'uuid': '48b37bed-e847-4882-8a01-5c721e07f07d', 'common_name': 'Yaman kalyan', 'name': 'Yaman kalyāṇ'}
+{'uuid': '32d510d4-4c36-4d56-a3d2-21b1ce290560', 'common_name': 'Yamani bilawal', 'name': 'Yamanī bilāval'}
+{'uuid': 'df80e38a-e8db-407d-b1b0-f4d36d193350', 'common_name': 'Zilaf', 'name': 'Zilāph'}
+{'uuid': '1c3800f9-1842-405b-aa98-5b3357b5b4a0', 'common_name': 'Ragamalika', 'name': 'Rāgamalikā'}
+{'uuid': 'a09b182e-cc32-47fc-af90-a0de175ad03a', 'common_name': 'Barwa', 'name': 'Bārvā'}
+{'uuid': 'f9e4c992-12b9-4682-86aa-60b9a3de8160', 'common_name': 'Hemant', 'name': 'Hēmant'}
+{'uuid': 'dcbc3192-cd82-4917-9203-f55578d6196b', 'common_name': 'Dagori', 'name': 'Ḍāgori'}
+{'uuid': 'a960b75d-e063-4d5c-943e-b7d91586f24d', 'common_name': 'Hindol Pancham', 'name': 'Hindōl pañcam'}
+{'uuid': '95b82215-d23e-49bd-a1f2-549ec5b3684b', 'common_name': 'Nat Kamod', 'name': 'Naṭ kāmōd'}
+{'uuid': '8e122721-165b-452a-8713-c570fe19b411', 'common_name': 'Jait Kalyan', 'name': 'Jait kalyāṇ'}
+{'uuid': 'b90556bf-81ef-4602-8e76-90a85a804cdb', 'common_name': 'Lagan Gandhar', 'name': 'Lagan gāndhār'}
+{'uuid': 'e85ee12c-7931-4c60-98dd-23fb22b897e1', 'common_name': 'Khokar', 'name': 'Khokar'}
+{'uuid': '1c1edb27-2f3e-49ab-9f91-3a113b4ba135', 'common_name': 'Gawti', 'name': 'Gavti'}
+{'uuid': '391c1bbe-ba67-4e6f-bf85-fe68be8ed680', 'common_name': 'Lalit Shuddha Dhaivat', 'name': 'Lalit Śuddh Dhaivat'}
+Information has been retrieved!

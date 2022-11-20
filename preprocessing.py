@@ -8,7 +8,14 @@ import pandas as pd
 from IPython.display import display
 from sklearn.preprocessing import OneHotEncoder
 
-#import tfio
+import warnings 
+
+warnings.filterwarnings("ignore")
+
+
+import tensorflow_io as tfio
+
+
 
 from os import path
 # from pydub import AudioSegment
@@ -42,36 +49,6 @@ def plot_spec(D, sr, instrument):
     ax.set(title = 'Spectrogram of ' + instrument)
     fig.colorbar(spec)
 
-def load_wav_16k_mono(filename):
-    """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
-    # https://www.tensorflow.org/api_docs/python/tf/audio/decode_wav
-    file_contents = tf.io.read_file(filename)
-    wav, sample_rate = tf.audio.decode_wav(
-          file_contents,
-          desired_channels = 1 # skip second channel
-    )
-    wav = tf.squeeze(wav, axis=-1)
-    sample_rate = tf.cast(sample_rate, dtype=tf.int64)
-    wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out=16000)
-    return wav
-
-def create_batch(dataset):
-    '''
-    To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
-    At runtime, this function will be called periodically to retrieve the next batch of audio data 
-    '''
-    batch_x = []
-    batch_y = []
-
-    for audiofile in dataset:
-        # Create the absolute path to the file given the relative filename
-
-        # Load the audio in to a np array 
-
-        # Resample the audio to a consistent sampling rate, pad/truncate as needed
-
-        # Any sort of data augmentation (optional - I don't think we need though)
-        print(audiofile)
 
 def generate_dataset(dataset_path = "./raga-data"):
     '''
@@ -82,8 +59,10 @@ def generate_dataset(dataset_path = "./raga-data"):
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
         in question. 
 
-    Returns: an n x 2 numpy array, where n is the number of audio tracks that will be used in the data set, along with 
-    the raag they belong too.
+    Returns: 
+        - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version 
+        of the raga names
+        - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
     '''
     raga_dict = dict()
     raga_directories = next(os.walk(dataset_path))[1]
@@ -105,7 +84,6 @@ def generate_dataset(dataset_path = "./raga-data"):
     
     enc = OneHotEncoder(handle_unknown='ignore')
     ragas_onehot = enc.fit_transform(ragas.reshape(-1,1)).toarray()   
-    print(type(ragas_onehot))
 
     # https://stackoverflow.com/questions/35565376/insert-list-of-lists-into-single-column-of-pandas-df
     df['Raga One-Hot'] = pd.Series(list(ragas_onehot))
@@ -117,6 +95,39 @@ def generate_dataset(dataset_path = "./raga-data"):
 
     return df, enc
 
+
+def load_wav_16k_mono(filename, sampling_rate = 16000):
+    """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
+    # https://www.tensorflow.org/api_docs/python/tf/audio/decode_wav
+    file_contents = tf.io.read_file(filename)
+    wav, sample_rate = tf.audio.decode_wav(
+          file_contents,
+          desired_channels = 1 # skip second channel
+    )
+    wav = tf.squeeze(wav, axis=-1)
+    sample_rate = tf.cast(sample_rate, dtype=tf.int64)
+    wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out = sampling_rate)
+    return wav
+
+
+def create_batch(dataset):
+    '''
+    To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
+    At runtime, this function will be called periodically to retrieve the next batch of audio data 
+    '''
+    batch_x = []
+    batch_y = []
+
+    for audiofile in dataset:
+        # Create the absolute path to the file given the relative filename
+
+        # Load the audio in to a np array 
+
+        # Resample the audio to a consistent sampling rate, pad/truncate as needed
+
+        # Any sort of data augmentation (optional - I don't think we need though)
+        print(audiofile)
+
 def main():
     raags= ['recordings/Abhogee', 'recordings/Bhageshri', 'recordings/Bhoop/', 'recordings/Bhairav/']
 
@@ -124,3 +135,5 @@ def main():
 
 if __name__ == "__main__":
     generate_dataset()
+
+# git config --global user.name "Ravindra Bisram"

@@ -51,6 +51,27 @@ def load_wav_16k_mono(filename):
     wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out=16000)
     return wav
 
+def create_batch(dataset):
+    '''
+    To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
+    At runtime, this function will be called periodically to retrieve the next batch of audio data 
+    '''
+    batch_x = []
+    batch_y = []
+
+    for audiofile in dataset:
+        # Create the absolute path to the file given the relative filename
+
+        # Load the audio in to a np array 
+
+        # Resample the audio to a consistent sampling rate, pad/truncate as needed
+
+        # Any sort of data augmentation (optional - I don't think we need though)
+        print(audiofile)
+
+def generate_dataset():
+    '''Iterate through the '''
+    dataset_path = './raga-data'
 
 
 def main():

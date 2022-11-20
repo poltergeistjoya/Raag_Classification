@@ -136,4 +136,4 @@ def main():
 if __name__ == "__main__":
     generate_dataset()
 
-# git config --global user.name "Ravindra Bisram"
+# ssh-keygen -t rsa -b 4096 -C "ravindrabisram@gmail.com"

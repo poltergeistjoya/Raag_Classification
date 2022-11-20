@@ -35,11 +35,25 @@ def wavconv(directories):
             #print(dst)
     return 0
 
-def to_decibles(signal):
+def to_decibles(signal, method = 'librosa'):
     # Perform short time Fourier Transformation of signal and take absolute value of results
-    stft = np.abs(librosa.stft(signal))
+    if method == 'librosa':
+        stft = np.abs(librosa.stft(signal))
+    else: 
+        frame_length = 4096
+        frame_step = 1024
+
+        stft = tf.signal.stft(
+            signal,
+            frame_length,
+            frame_step,
+            pad_end=False
+        )
+        
     # Convert to dB
     D = librosa.amplitude_to_db(stft, ref = np.max) # Set reference value to the maximum value of stft.
+    
+    
     return D # Return converted audio signal
 
 # Function to plot the converted audio signal

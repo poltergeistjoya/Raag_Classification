@@ -4,10 +4,14 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tfio
+import pandas as pd
+from IPython.display import display
+from sklearn.preprocessing import OneHotEncoder
+
+#import tfio
 
 from os import path
-from pydub import AudioSegment
+# from pydub import AudioSegment
 
 #given a list of directories with  .mp3 files, all will  be converted to wav
 def wavconv(directories):
@@ -69,10 +73,49 @@ def create_batch(dataset):
         # Any sort of data augmentation (optional - I don't think we need though)
         print(audiofile)
 
-def generate_dataset():
-    '''Iterate through the '''
-    dataset_path = './raga-data'
+def generate_dataset(dataset_path = "./raga-data"):
+    '''
+    Iterate through directory and collect the relative path of each recording.
+    
+    Parameters: 
+        - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
+        contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
+        in question. 
 
+    Returns: an n x 2 numpy array, where n is the number of audio tracks that will be used in the data set, along with 
+    the raag they belong too.
+    '''
+    raga_dict = dict()
+    raga_directories = next(os.walk(dataset_path))[1]
+
+    for raga_directory in raga_directories:
+        recordings_path = os.path.join(dataset_path, raga_directory)
+        filenames = [os.path.join(recordings_path, x) for x in next(os.walk(recordings_path), (None, None, []))[2]]
+        raga_dict[raga_directory] = filenames 
+    
+    # Generate master list where each entry is [path to audio file, name of Raag]
+    master_list = []
+
+    for raga in raga_dict.keys():
+        expanded_list = [[x, raga] for x in raga_dict[raga]]
+        master_list += expanded_list
+
+    df = pd.DataFrame (master_list, columns = ['File path', 'Raga'])
+    ragas = df.Raga.values
+    
+    enc = OneHotEncoder(handle_unknown='ignore')
+    ragas_onehot = enc.fit_transform(ragas.reshape(-1,1)).toarray()   
+    print(type(ragas_onehot))
+
+    # https://stackoverflow.com/questions/35565376/insert-list-of-lists-into-single-column-of-pandas-df
+    df['Raga One-Hot'] = pd.Series(list(ragas_onehot))
+
+    # print(ragas)
+    # print(enc.inverse_transform(ragas))
+    
+    display(df)
+
+    return df, enc
 
 def main():
     raags= ['recordings/Abhogee', 'recordings/Bhageshri', 'recordings/Bhoop/', 'recordings/Bhairav/']
@@ -80,4 +123,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    generate_dataset()

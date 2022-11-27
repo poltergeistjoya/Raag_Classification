@@ -37,4 +37,26 @@ def query_raga(common_name = 'Bageshree'):
         time = dunya.hindustani.get_recording(recording['mbid'])['length']
         print(f"{i}: {round(time/1000/60, 2)} - {recording['title']}")
 
-query_raga()
+
+def create_raag_data(common_name = 'Bageshree', destination = './raga-data/Bageshree'):
+    '''Uses a ragas common name to download all the audio files for said raga to destination folder'''
+    print("=" * 25, common_name, "=" * 25)
+    raga = next(item for item in raags if item["common_name"] == common_name)
+    raga_recordings =  dunya.hindustani.get_raag(raga['uuid'])['recordings']
+
+    print(f"Starting download of {len(raga_recordings)} audio files for raga {common_name}")
+    
+    for i, recording in enumerate(raga_recordings):
+        if i < 3:
+            continue 
+        
+        time = dunya.hindustani.get_recording(recording['mbid'])['length']
+        print(f"{i}/{len(raga_recordings)}: {round(time/1000/60, 2)} - Downloading - {recording['title']}")
+        dunya.hindustani.download_mp3(recording['mbid'], destination)
+        print("~ Download complete!")
+
+    print("Files successfully downloaded")
+
+if __name__ == "__main__":
+    # query_raga()
+    create_raag_data()

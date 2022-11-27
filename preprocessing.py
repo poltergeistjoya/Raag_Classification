@@ -8,15 +8,6 @@ import pandas as pd
 from IPython.display import display
 from sklearn.preprocessing import OneHotEncoder
 
-import warnings 
-
-warnings.filterwarnings("ignore")
-
-
-import tensorflow_io as tfio
-
-
-
 from os import path
 # from pydub import AudioSegment
 
@@ -49,26 +40,26 @@ def to_decibles(signal, method = 'librosa'):
             frame_step,
             pad_end=False
         )
-        
+
     # Convert to dB
     D = librosa.amplitude_to_db(stft, ref = np.max) # Set reference value to the maximum value of stft.
-    
     
     return D # Return converted audio signal
 
 # Function to plot the converted audio signal
-def plot_spec(D, sr, instrument):
+def plot_spec(D, sr, raag = "raag"):
     fig, ax = plt.subplots(figsize = (30,10))
     spec = librosa.display.specshow(D, sr=sr, x_axis='time', y_axis='linear', ax=ax)
-    ax.set(title = 'Spectrogram of ' + instrument)
+    ax.set(title = 'Spectrogram of ' + raag)
     fig.colorbar(spec)
+    plt.show() 
 
 
 def generate_dataset(dataset_path = "./raga-data"):
     '''
     Iterate through directory and collect the relative path of each recording.
     
-    Parameters: 
+    Parameters: x
         - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
         in question. 
@@ -120,14 +111,15 @@ def load_wav_16k_mono(filename, sampling_rate = 16000):
     )
     wav = tf.squeeze(wav, axis=-1)
     sample_rate = tf.cast(sample_rate, dtype=tf.int64)
-    wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out = sampling_rate)
+    # wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out = sampling_rate)
     return wav
 
 
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
-    At runtime, this function will be called periodically to retrieve the next batch of audio data 
+    At runtime, this function will be called periodically to retrieve the next batch of audio data. Since each recording 
+    is roughly 30 minutes in length, 
     '''
     batch_x = []
     batch_y = []
@@ -142,12 +134,33 @@ def create_batch(dataset):
         # Any sort of data augmentation (optional - I don't think we need though)
         print(audiofile)
 
+def plot_chroma(signal, sampling_rate):
+    S = np.abs(librosa.stft(y, n_fft=4096))**2
+
+    chroma = librosa.feature.chroma_stft(y=S, sr=sampling_rate)
+    fig, ax = plt.subplots(nrows=2, sharex=True)
+    img = librosa.display.specshow(librosa.amplitude_to_db(S, ref=np.max),
+                                y_axis='log', x_axis='time', ax=ax[0])
+    fig.colorbar(img, ax=[ax[0]])
+    ax[0].label_outer()
+    #img = librosa.display.specshow(chroma, y_axis='chroma', x_axis='time', ax=ax[1])
+    #fig.colorbar(img, ax=[ax[1]])
+    plt.show() 
+
+
 def main():
     raags= ['recordings/Abhogee', 'recordings/Bhageshri', 'recordings/Bhoop/', 'recordings/Bhairav/']
 
 
-
 if __name__ == "__main__":
     generate_dataset()
+    testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
+    y, sr = librosa.load(testing_wav, sr=None)
+    plot_chroma(y, sr)
+    '''
+    print(y.shape, sr)
+    D = to_decibles(y)
+    print(D)
 
-# ssh-keygen -t rsa -b 4096 -C "ravindrabisram@gmail.com"
+    plot_spec(D, sr, raag = "raag")
+    '''

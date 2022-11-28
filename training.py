@@ -14,11 +14,24 @@ import preprocessing
 import model
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+IMAGE_LEN = 5
+IMAGE_WIDTH = 5
+NUM_RAGAS = 3
+LAMBDA = 0.1
+EPOCHS = 5
+BATCH_SIZE = 4 # Num Audio files in a batch 
 
 # Generate and shuffle data 
 # https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows
 df , enc = preprocessing.generate_dataset()
-data = df.sample(frac=1).reset_index(drop=True)
+df = df.sample(frac=1).reset_index(drop=True)
+# Should split off a small test set here later on
+
+# List of dataframes, where each entry is a single batch
+list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
+
+# Create model
+model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
 
 # create optimizer, we use adam with a Learning rate of 1e-4
 opt = Adam(learning_rate = 1e-4)
@@ -40,20 +53,18 @@ def train_step(batch):
 
     return loss_value
 
-epochs = 5
 
-if False:
-    for epoch in range(1, epochs+1):
-
-        bar = tf.keras.utils.Progbar(len(train_ds)-1)
+if True:
+    for epoch in range(1, EPOCHS+1):
+        bar = tf.keras.utils.Progbar(len(list_df)-1)
         losses = []
 
         # Iterate over the batches of the dataset.
-        for i, batch in enumerate(iter(train_ds)):
-            loss = train_step(batch[0], batch[1])
+        for i, batch in enumerate(iter(list_df)):
+            loss = train_step(batch)
             losses.append(loss)
             bar.update(i, values=[("loss", loss)])  
 
         avg = np.mean(losses)
-        print(f"Average loss for epoch {epoch}/{epochs}: {avg}")
-        ckpt_manager.save(checkpoint_number=e)
+        print(f"Average loss for epoch {epoch}/{EPOCHS}: {avg}")
+        # ckpt_manager.save(checkpoint_number=e)

@@ -154,9 +154,9 @@ def main():
 
 if __name__ == "__main__":
     generate_dataset()
-    testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
-    y, sr = librosa.load(testing_wav, sr=None)
-    plot_chroma(y, sr)
+    #testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
+    #y, sr = librosa.load(testing_wav, sr=None)
+    #plot_chroma(y, sr)
     '''
     print(y.shape, sr)
     D = to_decibles(y)

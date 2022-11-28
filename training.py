@@ -26,7 +26,7 @@ def train_step(batch):
     # For each audio file in the batch, generate series of spectrograms that correspond to it. 
     for data_sample in batch:
         # Function that takes in file path and returns series of spectrograms
-        
+        data = 
 
 
     with tf.GradientTape() as tape:

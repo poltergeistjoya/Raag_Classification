@@ -118,21 +118,49 @@ def load_wav_16k_mono(filename, sampling_rate = 16000):
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
-    At runtime, this function will be called periodically to retrieve the next batch of audio data. Since each recording 
-    is roughly 30 minutes in length, 
+    At runtime, this function will be called periodically to retrieve the next batch of audio data. 
+
+    Process: 
+        - Slice the audio file into 30s chunks 
+        - Take the STFT of each chunk and pair it with the corresponding class
+        - Return list spectrogram, one hot encoded pairs 
     '''
     batch_x = []
     batch_y = []
 
-    for audiofile in dataset:
-        # Create the absolute path to the file given the relative filename
+    dataset = dataset.reset_index()
 
-        # Load the audio in to a np array 
+    for index, audiofile in dataset.iterrows():
+        offset = 0.0
+        duration = 30.0
+        target_sr = 8000
+        file_length = librosa.get_duration(filename = audiofile['File path'])
 
-        # Resample the audio to a consistent sampling rate, pad/truncate as needed
+        while offset + duration < file_length:
+            # Load the audio in to a np array 
+            y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)
 
-        # Any sort of data augmentation (optional - I don't think we need though)
-        print(audiofile)
+            # Resample the audio to a consistent sampling rate, pad/truncate as needed
+            y = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
+
+            # Padding when 
+            if len(y) != duration * target_sr:
+                y  = librosa.util.fix_length(y, size = duration * target_sr)
+                print("padded")
+
+            # Any sort of data augmentation (optional - can add in later)
+
+            # Take STFT 
+
+            # Add data to batch
+            batch_x.append(y)
+            batch_y.append(audiofile['Raga One-Hot'])
+
+            # Increment Offset 
+            offset += duration
+    
+    return batch_x, batch_y
+
 
 def plot_chroma(signal, sampling_rate):
     S = np.abs(librosa.stft(y, n_fft=4096))**2
@@ -153,7 +181,10 @@ def main():
 
 
 if __name__ == "__main__":
-    generate_dataset()
+    data, encoder = generate_dataset()
+    x, y = create_batch(data.iloc[0:3])
+    print(len(x), len(y))
+
     #testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
     #y, sr = librosa.load(testing_wav, sr=None)
     #plot_chroma(y, sr)

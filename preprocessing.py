@@ -7,11 +7,12 @@ import tensorflow as tf
 import pandas as pd
 from IPython.display import display
 from sklearn.preprocessing import OneHotEncoder
+import time
 
 from os import path
 # from pydub import AudioSegment
 
-#given a list of directories with  .mp3 files, all will  be converted to wav
+# Given a list of directories with  .mp3 files, all will  be converted to wav
 def wavconv(directories):
     for i in directories:
         mp3files = os.scandir(i)
@@ -131,6 +132,7 @@ def create_batch(dataset):
     dataset = dataset.reset_index()
 
     for index, audiofile in dataset.iterrows():
+        t = time.time()
         offset = 0.0
         duration = 30.0
         target_sr = 8000
@@ -151,14 +153,19 @@ def create_batch(dataset):
             # Any sort of data augmentation (optional - can add in later)
 
             # Take STFT 
+            spec = to_decibles(y)
 
             # Add data to batch
-            batch_x.append(y)
+            batch_x.append(spec)
             batch_y.append(audiofile['Raga One-Hot'])
 
             # Increment Offset 
             offset += duration
-    
+        
+        print(f'Elapsed: {time.time() - t}')
+            
+    plot_spec(batch_x[100], target_sr)
+
     return batch_x, batch_y
 
 

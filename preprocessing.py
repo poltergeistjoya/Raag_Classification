@@ -10,9 +10,12 @@ from sklearn.preprocessing import OneHotEncoder
 import time
 
 from os import path
-# from pydub import AudioSegment
+from pydub import AudioSegment
 
-# Given a list of directories with  .mp3 files, all will  be converted to wav
+'''
+Given a list of directories with  .mp3 files, all will  be converted to wav
+*** needs some extra functionality to delete the .mp3 files after***
+'''
 def wavconv(directories):
     for i in directories:
         mp3files = os.scandir(i)
@@ -31,7 +34,7 @@ def to_decibles(signal, method = 'librosa'):
     # Perform short time Fourier Transformation of signal and take absolute value of results
     if method == 'librosa':
         stft = np.abs(librosa.stft(signal))
-    else: 
+    else:
         frame_length = 4096
         frame_step = 1024
 
@@ -44,7 +47,7 @@ def to_decibles(signal, method = 'librosa'):
 
     # Convert to dB
     D = librosa.amplitude_to_db(stft, ref = np.max) # Set reference value to the maximum value of stft.
-    
+
     return D # Return converted audio signal
 
 # Function to plot the converted audio signal
@@ -53,20 +56,20 @@ def plot_spec(D, sr, raag = "raag"):
     spec = librosa.display.specshow(D, sr=sr, x_axis='time', y_axis='linear', ax=ax)
     ax.set(title = 'Spectrogram of ' + raag)
     fig.colorbar(spec)
-    plt.show() 
+    plt.show()
 
 
-def generate_dataset(dataset_path = "./raga-data"):
+def generate_dataset(dataset_path = "./recordings"):
     '''
     Iterate through directory and collect the relative path of each recording.
-    
+
     Parameters: x
         - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
-        in question. 
+        in question.
 
-    Returns: 
-        - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version 
+    Returns:
+        - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version
         of the raga names
         - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
     '''
@@ -76,8 +79,8 @@ def generate_dataset(dataset_path = "./raga-data"):
     for raga_directory in raga_directories:
         recordings_path = os.path.join(dataset_path, raga_directory)
         filenames = [os.path.join(recordings_path, x) for x in next(os.walk(recordings_path), (None, None, []))[2]]
-        raga_dict[raga_directory] = filenames 
-    
+        raga_dict[raga_directory] = filenames
+
     # Generate master list where each entry is [path to audio file, name of Raag]
     master_list = []
 
@@ -87,17 +90,17 @@ def generate_dataset(dataset_path = "./raga-data"):
 
     df = pd.DataFrame (master_list, columns = ['File path', 'Raga'])
     ragas = df.Raga.values
-    
+
     enc = OneHotEncoder(handle_unknown='ignore')
-    ragas_onehot = enc.fit_transform(ragas.reshape(-1,1)).toarray()   
+    ragas_onehot = enc.fit_transform(ragas.reshape(-1,1)).toarray()
 
     # https://stackoverflow.com/questions/35565376/insert-list-of-lists-into-single-column-of-pandas-df
     df['Raga One-Hot'] = pd.Series(list(ragas_onehot))
 
     # print(ragas)
     # print(enc.inverse_transform(ragas))
-    
-    display(df)
+
+    #display(df.to_string())
 
     return df, enc
 
@@ -119,12 +122,12 @@ def load_wav_16k_mono(filename, sampling_rate = 16000):
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
-    At runtime, this function will be called periodically to retrieve the next batch of audio data. 
+    At runtime, this function will be called periodically to retrieve the next batch of audio data.
 
-    Process: 
-        - Slice the audio file into 30s chunks 
+    Process:
+        - Slice the audio file into 30s chunks
         - Take the STFT of each chunk and pair it with the corresponding class
-        - Return list spectrogram, one hot encoded pairs 
+        - Return list spectrogram, one hot encoded pairs
     '''
     batch_x = []
     batch_y = []
@@ -139,32 +142,32 @@ def create_batch(dataset):
         file_length = librosa.get_duration(filename = audiofile['File path'])
 
         while offset + duration < file_length:
-            # Load the audio in to a np array 
+            # Load the audio in to a np array
             y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)
 
             # Resample the audio to a consistent sampling rate, pad/truncate as needed
             y = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
 
-            # Padding when 
+            # Padding when
             if len(y) != duration * target_sr:
                 y  = librosa.util.fix_length(y, size = duration * target_sr)
                 print("padded")
 
             # Any sort of data augmentation (optional - can add in later)
 
-            # Take STFT 
+            # Take STFT
             spec = to_decibles(y)
 
             # Add data to batch
             batch_x.append(spec)
             batch_y.append(audiofile['Raga One-Hot'])
 
-            # Increment Offset 
+            # Increment Offset
             offset += duration
-        
+
         print(f'Elapsed: {time.time() - t}')
-            
-    plot_spec(batch_x[100], target_sr)
+
+    #plot_spec(batch_x[100], target_sr)
 
     return batch_x, batch_y
 
@@ -180,17 +183,21 @@ def plot_chroma(signal, sampling_rate):
     ax[0].label_outer()
     #img = librosa.display.specshow(chroma, y_axis='chroma', x_axis='time', ax=ax[1])
     #fig.colorbar(img, ax=[ax[1]])
-    plt.show() 
+    plt.show()
 
 
 def main():
-    raags= ['recordings/Abhogee', 'recordings/Bhageshri', 'recordings/Bhoop/', 'recordings/Bhairav/']
+    '''
+    only need to conv to wav once
+    '''
+    #raags= ['recordings/Abhogee/', 'recordings/Bhageshri/', 'recordings/Bhoop/', 'recordings/Bhairav/']
+    #wavconv(raags)
 
-
-if __name__ == "__main__":
     data, encoder = generate_dataset()
-    x, y = create_batch(data.iloc[0:3])
+    #x, y = create_batch(data.iloc[0:10])
+    x, y = create_batch(data)
     print(len(x), len(y))
+    #print((x),(y))
 
     #testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
     #y, sr = librosa.load(testing_wav, sr=None)
@@ -202,3 +209,6 @@ if __name__ == "__main__":
 
     plot_spec(D, sr, raag = "raag")
     '''
+
+if __name__ == "__main__":
+    main()

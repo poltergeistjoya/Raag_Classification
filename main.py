@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
+import sys
+import os
 import numpy as np
 import tensorflow as tf
-import sys
 import matplotlib.pyplot as plt
+import pandas as pd
+import librosa
+import librosa.display
+import time
 
 from absl import flags
-from dataclasses import dataclass, field, InitVar
 from joblib import Memory
-from tqdm import trange
 
-from tensorflow import keras
-from keras import optimizers
-from keras import backend as K
-#from tensorflow.keras import layers, models, regularizers, optimizers
-from PIL import Image
+from tensorflow.keras.layers import Conv2D, Dropout, MaxPool2D, Flatten, Add, Dense, Activation, BatchNormalization, Lambda, ReLU, PReLU
+from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flatten, Input, concatenate, ZeroPadding2D, LeakyReLU, GlobalAveragePooling2D
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.optimizers import Adam, SGD, RMSprop
+from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint, LearningRateScheduler
+from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.metrics import TopKCategoricalAccuracy
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
 
 memory = Memory(".cache")
 
@@ -22,26 +31,153 @@ flags.DEFINE_integer("batch_size", 1024, "Number of samples in a batch")
 flags.DEFINE_integer("epochs", 5, "Number of epochs")
 flags.DEFINE_float("lr", .1, "Learning rate for ADAM")
 flags.DEFINE_integer("num_iters", 50000, "number of iterations for ADAM")
-flags.DEFINE_string("optype", "style", "style or content extraction")
-flags.DEFINE_string("impath", "starry_night.jpeg", "path to content or style image")
+flags.DEFINE_string("ds_path", "./recordings", "path to dataset")
+
+def to_decibles(signal, method = 'librosa'):
+    # Perform short time Fourier Transformation of signal and take absolute value of results
+    if method == 'librosa':
+        stft = np.abs(librosa.stft(signal))
+    else:
+        frame_length = 4096
+        frame_step = 1024
+
+        stft = tf.signal.stft(
+            signal,
+            frame_length,
+            frame_step,
+            pad_end=False
+        )
+    # Convert to dB
+    D = librosa.amplitude_to_db(stft, ref = np.max) # Set reference value to the maximum value of stft.
+
+    return D # Return converted audio signal
 
 
-#make trainavar for gen content and style
-class Data(tf.Module):
-    def __init__(self, rng):
+    '''
+    Iterate through directory and collect the relative path of each recording.
+    Parameters: x
+        - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
+        contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
+        in question.
+    Returns:
+        - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version
+        of the raga names
+        - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
+    '''
+def generate_dataset(dataset_path):
+    raga_dict = dict()
+    raga_directories = next(os.walk(dataset_path))[1]
 
-        self.cont = tf.Variable(rng.uniform(low=0.0,high=1.0,size= [1,224,224,3]), trainable = True, dtype=tf.float32)
+    for raga_directory in raga_directories:
+        recordings_path = os.path.join(dataset_path, raga_directory)
+        filenames = [os.path.join(recordings_path, x) for x in next(os.walk(recordings_path), (None, None, []))[2]]
+        raga_dict[raga_directory] = filenames
+
+    # Generate master list where each entry is [path to audio file, name of Raag]
+    master_list = []
+
+    for raga in raga_dict.keys():
+        expanded_list = [[x, raga] for x in raga_dict[raga]]
+        master_list += expanded_list
+
+    df = pd.DataFrame (master_list, columns = ['File path', 'Raga'])
+    ragas = df.Raga.values
+
+    enc = OneHotEncoder(handle_unknown='ignore')
+    ragas_onehot = enc.fit_transform(ragas.reshape(-1,1)).toarray()
+
+    # https://stackoverflow.com/questions/35565376/insert-list-of-lists-into-single-column-of-pandas-df
+    df['Raga One-Hot'] = pd.Series(list(ragas_onehot))
+
+    # print(ragas)
+    # print(enc.inverse_transform(ragas))
+
+    #display(df.to_string())
+
+    return df, enc
+
+def create_batch(dataset):
+    '''
+    To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
+    At runtime, this function will be called periodically to retrieve the next batch of audio data.
+    Process:
+        - Slice the audio file into 30s chunks
+        - Take the STFT of each chunk and pair it with the corresponding class
+        - Return list spectrogram, one hot encoded pairs
+    '''
+    batch_x = []
+    batch_y = []
+
+    dataset = dataset.reset_index()
+
+    for index, audiofile in dataset.iterrows():
+        t = time.time()
+        offset = 0.0
+        duration = 30.0
+        target_sr = 8000
+        file_length = librosa.get_duration(filename = audiofile['File path'])
+
+        while offset + duration < file_length:
+            # Load the audio in to a np array
+            y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)
+
+            # Resample the audio to a consistent sampling rate, pad/truncate as needed
+            y = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
+
+            # Padding when
+            if len(y) != duration * target_sr:
+                y  = librosa.util.fix_length(y, size = duration * target_sr)
+                print("padded")
+
+            # Any sort of data augmentation (optional - can add in later)
+
+            # Take STFT
+            spec = to_decibles(y)
+
+            # Add data to batch
+            batch_x.append(spec)
+            batch_y.append(audiofile['Raga One-Hot'])
+
+            # Increment Offset
+            offset += duration
+
+        print(f'Elapsed: {time.time() - t}')
+
+    #plot_spec(batch_x[100], target_sr)
+
+    return batch_x, batch_y
+
+def conv_module(input, num_filters, activation, kern_reg, dropout, padding="same"):
+    input = Conv2D(filters = num_filters, kernel_size = (3, 3), activation = activation, padding = padding, kernel_regularizer = kern_reg)(input)
+    input = BatchNormalization(axis=-1)(input)
+
+    return input
 
 
 @memory.cache()
-def vgg_16():
-    #IMPLEMENT VGG NETWORK
-    #USE FEATURE SPACE OF 16 CONV AND 5 POOLING LAYERS OF 19 LAYER VGG
-    #REPLACE MAX POOLING WITH AVERAGE POOLING
-    model = VGG16(include_top=False, weights = "imagenet")
+def simple_model(image_len, image_width, num_classes, lambda_val):
+  inputShape = (image_len, image_width, 1)
+  inputs = Input(shape=inputShape)
 
-    print(model.summary())
-    return model
+  output = Conv2D(filters = 32, kernel_size = (3, 3), activation = 'relu', kernel_regularizer = l2(lambda_val))(inputs)
+  output = BatchNormalization(name='batchnorm_1')(output)
+  output = Activation('relu')(output)
+
+  output = MaxPool2D(pool_size=(2,2))(output)
+  output = Conv2D(filters = 64, kernel_size = (3, 3), activation = 'relu', kernel_regularizer = l2(lambda_val))(output)
+
+  output = MaxPool2D(pool_size=(2,2))(output)
+  output = Dropout(0.25)(output)
+  output = Flatten()(output)
+  output = Dense(128,activation='relu',kernel_regularizer=l2(lambda_val))(output)
+  output = Dropout(0.5)(output)
+
+  output = Dense(num_classes,activation='softmax')(output)
+
+  model = Model(inputs, output, name="simple_model")
+  print(model.summary())
+
+  return model
 
 
 def main():
@@ -52,15 +188,21 @@ def main():
     batch_size = FLAGS.batch_size
     lr = FLAGS.lr
     iters = FLAGS.num_iters
-    optype = FLAGS.optype
-    path = FLAGS.impath
+    ds_path = FLAGS.ds_path
 
-    #random number gen
-    np_rng = np.random.default_rng(31415)
+    #dataset with file paths and one hot encoded labels
+    data, encoder = generate_dataset(ds_path)
+
+    x, y = create_batch(data)
+    print(len(x), len(y))
+
+    #doesn't look like this is used yet
+    variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
+
 
     #initialize model
-
-    optimizer = keras.optimizers.Adam(learning_rate = lr_schedule)
+    model = simple_model(32, 32, 4, lambda_val = 1e-5)
+    model.compile(optimizer='adam',loss=tf.keras.losses.categorical_crossentropy,metrics=['accuracy'])
 
 
     lossarr = np.zeros(iters, dtype=float)

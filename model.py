@@ -71,12 +71,13 @@ def simple_model(image_len, image_width, num_classes, lambda_val):
 
   return model
 
-variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
+if __name__ == "__main__":
+    variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
 
-model = simple_model(32, 32, 4, lambda_val = 1e-5)
-model.compile(optimizer='adam',loss=tf.keras.losses.categorical_crossentropy,metrics=['accuracy'])
+    model = simple_model(32, 32, 4, lambda_val = 1e-5)
+    model.compile(optimizer='adam',loss=tf.keras.losses.categorical_crossentropy,metrics=['accuracy'])
 
-print(model.summary())
+    print(model.summary())
 
 #history = model.fit(x_train,y_train,epochs=EPOCHS,batch_size=BATCH_SIZE,callbacks=[variable_learning_rate],validation_data=(x_val,y_val),verbose=1)
 #score = model.evaluate(x_test,y_test,verbose=0)

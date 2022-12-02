@@ -28,10 +28,11 @@ memory = Memory(".cache")
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer("batch_size", 1024, "Number of samples in a batch")
-flags.DEFINE_integer("epochs", 5, "Number of epochs")
+flags.DEFINE_integer("epochs", 20, "Number of epochs")
 flags.DEFINE_float("lr", .1, "Learning rate for ADAM")
 flags.DEFINE_integer("num_iters", 50000, "number of iterations for ADAM")
 flags.DEFINE_string("ds_path", "./recordings", "path to dataset")
+flags.DEFINE_integer("seed", 31415, "random seed for reproducible results")
 
 def to_decibles(signal, method = 'librosa'):
     # Perform short time Fourier Transformation of signal and take absolute value of results
@@ -52,6 +53,16 @@ def to_decibles(signal, method = 'librosa'):
 
     return D # Return converted audio signal
 
+# Function to plot the converted audio signal for checking
+def plot_spec(D, sr, raag = "raag"):
+    fig, ax = plt.subplots(figsize = (30,10))
+    spec = librosa.display.specshow(D, sr=sr, x_axis='time', y_axis='linear', ax=ax)
+    ax.set(title = 'Spectrogram of ' + raag)
+    fig.colorbar(spec)
+    plt.show()
+    plt.savefig("D")
+
+    return spec
 
     '''
     Iterate through directory and collect the relative path of each recording.
@@ -96,6 +107,7 @@ def generate_dataset(dataset_path):
 
     return df, enc
 
+@memory.cache()
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
@@ -143,9 +155,9 @@ def create_batch(dataset):
 
         print(f'Elapsed: {time.time() - t}')
 
-    #plot_spec(batch_x[100], target_sr)
+    #img = plot_spec(batch_x[10], target_sr)
 
-    return batch_x, batch_y
+    return batch_x, batch_y, #img
 
 def conv_module(input, num_filters, activation, kern_reg, dropout, padding="same"):
     input = Conv2D(filters = num_filters, kernel_size = (3, 3), activation = activation, padding = padding, kernel_regularizer = kern_reg)(input)
@@ -189,12 +201,34 @@ def main():
     lr = FLAGS.lr
     iters = FLAGS.num_iters
     ds_path = FLAGS.ds_path
+    seed = FLAGS.seed
 
     #dataset with file paths and one hot encoded labels
     data, encoder = generate_dataset(ds_path)
 
-    x, y = create_batch(data)
-    print(len(x), len(y))
+    #train 80%, validate 10%, test 10% dfs
+    train_df, rest_df = train_test_split(data, test_size= 0.2, random_state = seed)
+    val_df, test_df = train_test_split(rest_df, test_size = 0.5, random_state = seed)
+
+    #print(train_df.shape, val_df.shape, test_df.shape, val_df, test_df)
+
+    #x, y, img = create_batch(val_df)
+    test_x, test_y = create_batch(test_df)
+    val_x,val_y = create_batch(val_df)
+    train_x, train_y = create_batch(train_df)
+
+    #print(img.shape)
+
+    #print(x[10], x[10].shape)
+    #print(x[10].shape)
+    #plt.imshow(x[10])
+    #plt.show()
+    #plt.savefig('specplot.png')
+
+    #print(x[11].shape)
+    #plt.imshow(x[11])
+    #plt.show()
+    #plt.savefig('specplot2.png')
 
     #doesn't look like this is used yet
     variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
@@ -203,9 +237,26 @@ def main():
     #initialize model
     model = simple_model(32, 32, 4, lambda_val = 1e-5)
     model.compile(optimizer='adam',loss=tf.keras.losses.categorical_crossentropy,metrics=['accuracy'])
+    history = model.fit(train_x, train_y,
+            steps_per_epoch = (train_x.shape[0])//batch_size,
+            epochs = epochs,
+            batch_size=batch_size,
+            validation_data=(val_x, val_y),
+            verbose = 1)
+
+    test_lost, test_acc = model.evaluate(test_x, test_y, verbose = 2)
+
+    #PLOTTING
+    plt.plot(history.history['accuracy'], label='accuracy')
+    plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.ylim([0.5, 100])
+    plt.legend(loc='lower right')
+    plt.tight_layout()
+    plt.savefig('./epochaccuracy.pdf')
 
 
-    lossarr = np.zeros(iters, dtype=float)
 
 
 if __name__ == "__main__":

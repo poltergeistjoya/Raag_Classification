@@ -30,6 +30,9 @@ df = df.sample(frac=1).reset_index(drop=True)
 # List of dataframes, where each entry is a single batch
 list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
 
+# Split the list into train, test, val
+#
+
 # Create model
 model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
 

@@ -27,7 +27,7 @@ from sklearn.preprocessing import OneHotEncoder
 memory = Memory(".cache")
 
 FLAGS = flags.FLAGS
-flags.DEFINE_integer("batch_size", 1024, "Number of samples in a batch")
+flags.DEFINE_integer("batch_size", 32, "Number of samples in a batch")
 flags.DEFINE_integer("epochs", 20, "Number of epochs")
 flags.DEFINE_float("lr", .1, "Learning rate for ADAM")
 flags.DEFINE_integer("num_iters", 50000, "number of iterations for ADAM")
@@ -213,38 +213,45 @@ def main():
     #print(train_df.shape, val_df.shape, test_df.shape, val_df, test_df)
 
     #x, y, img = create_batch(val_df)
-    test_x, test_y = create_batch(test_df)
-    val_x,val_y = create_batch(val_df)
-    train_x, train_y = create_batch(train_df)
+    t_test_x, t_test_y = create_batch(test_df)
+    t_val_x,t_val_y = create_batch(val_df)
+    t_train_x, t_train_y = create_batch(train_df)
 
     #print(img.shape)
+    input_len = t_train_x[0].shape[0]
+    input_wid = t_train_x[0].shape[1]
+    print(t_train_y[0].shape)
+    num_cats = t_train_y[0].shape[0]
+    print(len(t_train_x))
 
-    #print(x[10], x[10].shape)
-    #print(x[10].shape)
-    #plt.imshow(x[10])
-    #plt.show()
-    #plt.savefig('specplot.png')
+    #conv list of np arrays to np array
+    train_x = np.vstack([np.expand_dims(x,0) for x in t_train_x])
+    print(train_x.shape)
+    train_y = np.vstack([np.expand_dims(x,0) for x in t_train_y])
+    test_x = np.vstack([np.expand_dims(x,0) for x in t_test_x])
+    test_y = np.vstack([np.expand_dims(x,0) for x in t_test_y])
+    val_x = np.vstack([np.expand_dims(x,0) for x in t_val_x])
+    val_y = np.vstack([np.expand_dims(x,0) for x in t_val_y])
 
-    #print(x[11].shape)
-    #plt.imshow(x[11])
-    #plt.show()
-    #plt.savefig('specplot2.png')
 
     #doesn't look like this is used yet
     variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
 
 
     #initialize model
-    model = simple_model(32, 32, 4, lambda_val = 1e-5)
+    model = simple_model(input_len, input_wid, num_cats, lambda_val = 1e-5)
     model.compile(optimizer='adam',loss=tf.keras.losses.categorical_crossentropy,metrics=['accuracy'])
+    print(train_x.shape, train_y.shape)
     history = model.fit(train_x, train_y,
-            steps_per_epoch = (train_x.shape[0])//batch_size,
-            epochs = epochs,
+            steps_per_epoch = (len(train_x)//batch_size),
             batch_size=batch_size,
+            epochs = epochs,
             validation_data=(val_x, val_y),
             verbose = 1)
 
-    test_lost, test_acc = model.evaluate(test_x, test_y, verbose = 2)
+
+    test_loss, test_acc = model.evaluate(test_x, test_y, verbose = 2)
+    print("test_loss", test_loss, "test_acc", test_acc)
 
     #PLOTTING
     plt.plot(history.history['accuracy'], label='accuracy')

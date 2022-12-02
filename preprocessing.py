@@ -60,7 +60,7 @@ def generate_dataset(dataset_path = "./raga-data"):
     '''
     Iterate through directory and collect the relative path of each recording.
     
-    Parameters: x
+    Parameters:
         - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
         in question. 
@@ -137,7 +137,7 @@ def create_batch(dataset):
         duration = 30.0
         target_sr = 8000
         file_length = librosa.get_duration(filename = audiofile['File path'])
-
+    
         while offset + duration < file_length:
             # Load the audio in to a np array 
             y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)

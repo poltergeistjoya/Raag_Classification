@@ -45,16 +45,7 @@ def train_step(batch):
 
     return loss_value
 
-
-if False:
-    # Create model
-    model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
-
-    # create optimizer, we use adam with a Learning rate of 1e-4
-    opt = Adam(learning_rate = 1e-4)
-
-    # Categorical Cross Entropy Loss Function
-    cce = tf.keras.losses.CategoricalCrossentropy
+def main():
 
     for epoch in range(1, EPOCHS+1):
         bar = tf.keras.utils.Progbar(len(list_df)-1)
@@ -72,3 +63,11 @@ if False:
 
 if __name__ == "__main__":
     print(list_df[0])
+    # Create model
+    model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
+
+    # create optimizer, we use adam with a Learning rate of 1e-4
+    opt = Adam(learning_rate = 1e-4)
+
+    # Categorical Cross Entropy Loss Function
+    cce = tf.keras.losses.CategoricalCrossentropy

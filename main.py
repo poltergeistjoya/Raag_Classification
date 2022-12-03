@@ -17,36 +17,16 @@ import model
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 FLAGS = flags.FLAGS
-flags.DEFINE_float("lambda", 0.1, "Learning Rate")
+flags.DEFINE_float("lr", 0.1, "Learning Rate")
 flags.DEFINE_integer("epochs", 5, "Number of epochs")
 flags.DEFINE_integer("batch_size", 4, "Num Audio files in a batch")
 flags.DEFINE_string("ds_path", "./recordings", "Path to dataset")
 
 
-LAMBDA = 0.1
-EPOCHS = 5
-BATCH_SIZE = 4 # Num Audio files in a batch
+#LAMBDA = 0.1
+#EPOCHS = 5
+#BATCH_SIZE = 4 # Num Audio files in a batch
 
-# Generate and shuffle data
-# https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows
-df , enc = preprocessing.generate_dataset()
-df = df.sample(frac=1).reset_index(drop=True)
-# Should split off a small test set here later on
-
-# List of dataframes, where each entry is a single batch
-list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
-
-# Split the list into train, test, val
-#
-
-# Create model
-model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
-
-# create optimizer, we use adam with a Learning rate of 1e-4
-opt = Adam(learning_rate = 1e-4)
-
-# Categorical Cross Entropy Loss Function
-cce = tf.keras.losses.CategoricalCrossentropy
 
 def train_step(batch):
     # Batch is a slice of the dataset, each sample consists of ('path to audio file', one_hot_class)
@@ -65,7 +45,7 @@ def train_step(batch):
 def main():
     #Parse flags
     FLAGS(sys.argv)
-    LAMBDA = FLAGS.lambda
+    LAMBDA = FLAGS.lr
     EPOCHS = FLAGS.epochs
     BATCH_SIZE = FLAGS.batch_size
     DS_PATH = FLAGS.ds_path
@@ -78,6 +58,7 @@ def main():
 
     # List of dataframes, where each entry is a single batch
     list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
+    print(list_df.shape, list_df[0], list_df)
 
     # Split the list into train, test, val
     #

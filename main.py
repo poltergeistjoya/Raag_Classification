@@ -13,7 +13,7 @@ from absl import flags
 
 import pandas as pd
 import preprocessing
-import model
+import models
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 FLAGS = flags.FLAGS
@@ -58,13 +58,13 @@ def main():
 
     # List of dataframes, where each entry is a single batch
     list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
-    print(list_df.shape, list_df[0], list_df)
+    print(len(list_df), list_df[0], list_df)
 
     # Split the list into train, test, val
     #
 
     # Create model
-    model = model.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
+    model = models.simple_model(IMAGE_LEN, IMAGE_WIDTH, NUM_RAGAS, LAMBDA)
 
     # create optimizer, we use adam with a Learning rate of 1e-4
     opt = Adam(learning_rate = 1e-4)

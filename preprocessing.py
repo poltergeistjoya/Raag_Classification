@@ -59,7 +59,7 @@ def plot_spec(D, sr, raag = "raag"):
     plt.show()
 
 
-def generate_dataset(dataset_path = "./recordings"):
+def generate_dataset(dataset_path = "./raga-data"):
     '''
     Iterate through directory and collect the relative path of each recording.
     
@@ -171,6 +171,67 @@ def create_batch(dataset):
 
     return batch_x, batch_y
 
+def create_batch_2(dataset):
+    '''
+    To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
+    At runtime, this function will be called periodically to retrieve the next batch of audio data.
+
+    Process:
+        - Slice the audio file into 30s chunks
+        - Take the STFT of each chunk and pair it with the corresponding class
+        - Return list spectrogram, one hot encoded pairs
+    '''
+    batch_x = []
+    batch_y = []
+    raw_x = []
+
+    dataset = dataset.reset_index()
+    duration = 30.0
+    target_sr = 8000
+    target_size = duration * target_sr
+    
+    for index, audiofile in dataset.iterrows():
+        # print(audiofile)
+        t = time.time()
+        file_length = round(librosa.get_duration(filename = audiofile['File path']), 0)
+        print(file_length)
+
+        # Load the audio in to a np array
+        y, sr = librosa.load(audiofile['File path'], sr=None, offset=0.0, duration = 20001)
+        print(y.shape)
+
+        # Resample the audio to a consistent sampling rate
+        # y = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
+        '''
+        # Split into target_sized chunks
+        num_subsamples = y/target_size + 1 if y % target_size > 0 else y/target_size
+        subsamples = np.array_split(y, num_subsamples)
+        '''
+        '''
+        # Padding if necessary
+        if len(y) != target_size:
+            y  = librosa.util.fix_length(y, size = target_size)
+            print("padded")
+
+        # Any sort of data augmentation (optional - can add in later)
+
+        # Take STFT
+        spec = to_decibles(y)
+        
+
+        # Add data to batch
+        batch_x.append(spec)
+        batch_y.append(audiofile['Raga One-Hot'])
+
+
+
+        print(f'Elapsed: {time.time() - t}')
+
+    #plot_spec(batch_x[100], target_sr)
+
+    return batch_x, batch_y, raw_x
+    '''
+    return y
 
 def plot_chroma(signal, sampling_rate):
     S = np.abs(librosa.stft(y, n_fft=4096))**2
@@ -194,10 +255,11 @@ def main():
     #wavconv(raags)
 
     data, encoder = generate_dataset()
-    #x, y = create_batch(data.iloc[0:10])
-    x, y = create_batch(data)
-    print(len(x), len(y))
+    x = create_batch_2(data.iloc[0:1])
+    
+    print(len(x))
     #print((x),(y))
+    print(x[0].shape)
 
     #testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
     #y, sr = librosa.load(testing_wav, sr=None)

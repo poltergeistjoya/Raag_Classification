@@ -33,7 +33,7 @@ flags.DEFINE_string("ds_path", "./recordings", "Path to dataset")
 flags.DEFINE_integer("rand", 31415, "random seed")
 
 
-def train_step(model, batch, loss, opt):
+def train_step(model, batch, loss, opt, optype="train"):
     # Batch is a slice of the dataset, each sample consists of ('path to audio file', one_hot_class)
     # For each audio file in the batch, generate series of spectrograms that correspond to it.
     data_x, data_y = preprocessing.create_batch(batch)
@@ -44,10 +44,13 @@ def train_step(model, batch, loss, opt):
             loss_value = loss(np.expand_dims(data_y[i], axis =1).T, prediction)
             #print(loss_value, type(loss_value))
 
-    gradients = tape.gradient(loss_value, model.trainable_variables)
-    opt.apply_gradients(zip(gradients, model.trainable_variables))
+    if optype == "train":
+        gradients = tape.gradient(loss_value, model.trainable_variables)
+        opt.apply_gradients(zip(gradients, model.trainable_variables))
+        return loss_value
 
-    return loss_value
+    else:
+        return loss_value
 
 def main():
     #Parse flags
@@ -73,8 +76,6 @@ def main():
 
     #create 1 batch to get correct IMAGE_LEN, IMAGE_WIDTH
     temp_x, temp_y = preprocessing.create_batch(list_train[0])
-    #print("temp_x", len(temp_x), temp_x, "temp_y", len(temp_y), temp_y)
-    #print("temp_x data shape", temp_x[0].shape, "temp_y data shape", temp_y[0].shape)
     IMAGE_LEN = temp_x[0].shape[0]
     IMAGE_WIDTH = temp_x[0].shape[1]
     NUM_RAGAS = temp_y[0].shape[0]
@@ -89,18 +90,27 @@ def main():
     # Categorical Cross Entropy Loss Function
     cce = tf.keras.losses.CategoricalCrossentropy()
 
+    #avg epoch losses
+    epochlosses = []
+
     for epoch in range(1, EPOCHS+1):
-        bar = tf.keras.utils.Progbar(len(list_df)-1)
+        bar = tf.keras.utils.Progbar(len(list_train)-1)
         losses = []
 
         # Iterate over the batches of the dataset.
-        for i, batch in enumerate(iter(list_df)):
+        for i, batch in enumerate(iter(list_train)):
             loss = train_step(model, batch, cce,opt)
             losses.append(loss)
             bar.update(i, values=[("loss", loss)])
 
         avg = np.mean(losses)
+        epochlosses.append(avg)
         print(f"Average loss for epoch {epoch}/{EPOCHS}: {avg}")
+
+    #add validation step w train_step
+
+    print(epochlosses)
+
         # ckpt_manager.save(checkpoint_number=e)
 
 if __name__ == "__main__":

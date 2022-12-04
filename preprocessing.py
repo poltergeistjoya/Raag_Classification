@@ -11,7 +11,9 @@ import time
 
 from os import path
 from pydub import AudioSegment
+from joblib import Memory
 
+memory = Memory(".cache")
 '''
 Given a list of directories with  .mp3 files, all will  be converted to wav
 *** needs some extra functionality to delete the .mp3 files after***
@@ -62,7 +64,7 @@ def plot_spec(D, sr, raag = "raag"):
 def generate_dataset(dataset_path = "./recordings"):
     '''
     Iterate through directory and collect the relative path of each recording.
-    
+
     Parameters: x
         - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
@@ -118,7 +120,7 @@ def load_wav_16k_mono(filename, sampling_rate = 16000):
     # wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out = sampling_rate)
     return wav
 
-
+@memory.cache()
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
@@ -140,7 +142,7 @@ def create_batch(dataset):
         duration = 30.0
         target_sr = 8000
         file_length = librosa.get_duration(filename = audiofile['File path'])
-    
+
         while offset + duration < file_length:
             # Load the audio in to a np array
             y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)

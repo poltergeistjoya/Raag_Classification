@@ -2,6 +2,7 @@ import sys
 import os
 import numpy as np
 import tensorflow as tf
+from joblib import Memory
 from tensorflow.keras.layers import Conv2D, Dropout, MaxPool2D, Flatten, Add, Dense, Activation, BatchNormalization, Lambda, ReLU, PReLU
 from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flatten, Input, concatenate, ZeroPadding2D, LeakyReLU, GlobalAveragePooling2D
 from tensorflow.keras.models import Model, Sequential
@@ -12,6 +13,7 @@ from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.metrics import TopKCategoricalAccuracy
 
+memory = Memory(".cache")
 
 def conv_module(input, num_filters, activation, kern_reg, dropout, padding="same"):
     input = Conv2D(filters = num_filters, kernel_size = (3, 3), activation = activation, padding = padding, kernel_regularizer = kern_reg)(input)
@@ -37,7 +39,7 @@ def rav_model(width, height, depth, classes):
     x = double_conv_module(x, 64, activation='relu', kern_reg=KR, dropout = 0.2, padding='same')
     x = double_conv_module(x, 128, activation='relu', kern_reg=KR, dropout = 0.3, padding='same')
     x = double_conv_module(x, 128, activation='relu', kern_reg=KR, dropout = 0.4, padding='same')
-   
+
     x = Flatten()(x)
     x = Dense(512, activation='relu',kernel_regularizer=None)(x)
     x = BatchNormalization(axis=-1)(x)
@@ -48,6 +50,7 @@ def rav_model(width, height, depth, classes):
     model = Model(inputs, x, name="rav_net")
     return model
 
+@memory.cache()
 def simple_model(image_len, image_width, num_classes, lambda_val):
   inputShape = (image_len, image_width, 1)
   inputs = Input(shape=inputShape)

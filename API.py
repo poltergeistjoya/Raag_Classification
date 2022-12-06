@@ -59,4 +59,4 @@ def create_raag_data(common_name = 'Bageshree', destination = './raga-data/Bages
 
 if __name__ == "__main__":
     # query_raga()
-    create_raag_data()
+    create_raag_data(common_name="Bhupali", destination = './raga-data/Bhupali')

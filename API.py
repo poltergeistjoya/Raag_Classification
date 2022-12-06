@@ -60,6 +60,7 @@ def create_raag_data(common_name = 'Khamaj', destination = './raga-data/Khamaj')
 if __name__ == "__main__":
     # query_raga()
     #create_raag_data(common_name = 'Ahir bhairav', destination = './raga-data/Ahir bhairav')
+    create_raag_data(common_name="Bhupali", destination = './raga-data/Bhupali'common_name = 'Ahir lalat', destination = './raga-data/Ahir lalat')
     create_raag_data(common_name = 'Ahir lalat', destination = './raga-data/Ahir lalat')
     #create_raag_data(common_name = 'Ahiri todi', destination = './raga-data/Ahiri todi')
     #create_raag_data(common_name = 'Alahiya bilawal', destination = './raga-data/Alahiya bilawal')

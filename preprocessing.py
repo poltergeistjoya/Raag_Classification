@@ -3,7 +3,7 @@ import librosa
 import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf
+# import tensorflow as tf
 import pandas as pd
 from IPython.display import display
 from sklearn.preprocessing import OneHotEncoder
@@ -11,7 +11,9 @@ import time
 
 from os import path
 from pydub import AudioSegment
+from joblib import Memory
 
+memory = Memory(".cache")
 '''
 Given a list of directories with  .mp3 files, all will  be converted to wav
 *** needs some extra functionality to delete the .mp3 files after***
@@ -62,7 +64,7 @@ def plot_spec(D, sr, raag = "raag"):
 def generate_dataset(dataset_path = "./raga-data"):
     '''
     Iterate through directory and collect the relative path of each recording.
-    
+
     Parameters: x
         - dataset_path: the absolute path to the directory containing all of the data. Each subdirectory inside of this should
         contain all of the recordings for a specific raga, and the name of the subdirectory should be the common name of the raga
@@ -78,7 +80,7 @@ def generate_dataset(dataset_path = "./raga-data"):
 
     for raga_directory in raga_directories:
         recordings_path = os.path.join(dataset_path, raga_directory)
-        filenames = [os.path.join(recordings_path, x) for x in next(os.walk(recordings_path), (None, None, []))[2]]
+        filenames = [os.path.join(recordings_path, x).replace("\\","/") for x in next(os.walk(recordings_path), (None, None, []))[2]]
         raga_dict[raga_directory] = filenames
 
     # Generate master list where each entry is [path to audio file, name of Raag]
@@ -118,7 +120,7 @@ def load_wav_16k_mono(filename, sampling_rate = 16000):
     # wav = tfio.audio.resample(wav, rate_in=sample_rate, rate_out = sampling_rate)
     return wav
 
-
+@memory.cache()
 def create_batch(dataset):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
@@ -140,7 +142,7 @@ def create_batch(dataset):
         duration = 30.0
         target_sr = 8000
         file_length = librosa.get_duration(filename = audiofile['File path'])
-    
+
         while offset + duration < file_length:
             # Load the audio in to a np array
             y, sr = librosa.load(audiofile['File path'], sr=None, offset = offset, duration = 30.0)
@@ -183,7 +185,6 @@ def create_batch_2(dataset):
     '''
     batch_x = []
     batch_y = []
-    raw_x = []
 
     dataset = dataset.reset_index()
     duration = 30.0
@@ -191,47 +192,33 @@ def create_batch_2(dataset):
     target_size = duration * target_sr
     
     for index, audiofile in dataset.iterrows():
-        # print(audiofile)
         t = time.time()
+        filename = audiofile['File path']
         file_length = round(librosa.get_duration(filename = audiofile['File path']), 0)
-        print(file_length)
-
-        # Load the audio in to a np array
-        y, sr = librosa.load(audiofile['File path'], sr=None, offset=0.0, duration = 20001)
-        print(y.shape)
-
-        # Resample the audio to a consistent sampling rate
-        # y = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
-        '''
-        # Split into target_sized chunks
-        num_subsamples = y/target_size + 1 if y % target_size > 0 else y/target_size
-        subsamples = np.array_split(y, num_subsamples)
-        '''
-        '''
-        # Padding if necessary
-        if len(y) != target_size:
-            y  = librosa.util.fix_length(y, size = target_size)
-            print("padded")
-
-        # Any sort of data augmentation (optional - can add in later)
-
-        # Take STFT
-        spec = to_decibles(y)
         
+        sr = librosa.get_samplerate(filename)
+        stream = librosa.stream(filename,
+                            block_length=256,
+                            frame_length=2048,
+                            hop_length=2048)
+
+        mels = []
+        for y_block in stream:
+            m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
+                                                    n_fft=2048,
+                                                    hop_length=2048,
+                                                    center=False)
+            mels.append(m_block)
+
 
         # Add data to batch
-        batch_x.append(spec)
-        batch_y.append(audiofile['Raga One-Hot'])
+        batch_x.extend(mels)
+        batch_y.extend([audiofile['Raga One-Hot'] for i in range(len(mels))])
+
+        print(f'Elapsed: {round(time.time() - t, 2)}')
 
 
-
-        print(f'Elapsed: {time.time() - t}')
-
-    #plot_spec(batch_x[100], target_sr)
-
-    return batch_x, batch_y, raw_x
-    '''
-    return y
+    return batch_x, batch_y
 
 def plot_chroma(signal, sampling_rate):
     S = np.abs(librosa.stft(y, n_fft=4096))**2
@@ -248,20 +235,45 @@ def plot_chroma(signal, sampling_rate):
 
 
 def main():
-    '''
-    only need to conv to wav once
-    '''
-    #raags= ['recordings/Abhogee/', 'recordings/Bhageshri/', 'recordings/Bhoop/', 'recordings/Bhairav/']
-    #wavconv(raags)
+    testing_stream = False
+    
 
     data, encoder = generate_dataset()
-    x = create_batch_2(data.iloc[0:1])
-    
-    print(len(x))
-    #print((x),(y))
-    print(x[0].shape)
+    print(data)
+    print()
+    x, y = create_batch_2(data.iloc[0:10])
+    print(x[0])
+    print(y[0])
+    print(len(x), len(y))
 
-    #testing_wav = './raga-data/Bageshree/Bageshri-Aaroh Avroh-Vish.wav'
+    if testing_stream:
+        filename1 = 'raga-data\Bageshree\C R Vyas - Raga Bageshri & Chandrakauns.mp3'
+        filename2 = 'raga-data\Bageshree\Jagdish Prasad - Raga Bhageshri.mp3'
+        filename3 = 'raga-data\Bageshree\Rashid Khan - Raga Bageshri.mp3'
+        for filename in [filename1, filename2, filename3]:
+            sr = librosa.get_samplerate(filename)
+            stream = librosa.stream(filename,
+                                block_length=256,
+                                frame_length=2048,
+                                hop_length=2048)
+
+            mels = []
+            for y_block in stream:
+                m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
+                                                        n_fft=2048,
+                                                        hop_length=2048,
+                                                        center=False)
+                mels.append(m_block)
+
+            print(len(mels), mels[0])
+
+        print(type(mels))
+        mel_sgram = librosa.amplitude_to_db(mels[22], ref=np.min)
+        librosa.display.specshow(mel_sgram, sr=sr, x_axis='time', y_axis='mel')
+        plt.colorbar(format='%+2.0f dB')
+        plt.show()
+
+    # plot_spec(mel_sgram, sr)    
     #y, sr = librosa.load(testing_wav, sr=None)
     #plot_chroma(y, sr)
     '''

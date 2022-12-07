@@ -35,7 +35,7 @@ flags.DEFINE_integer("rand", 31415, "random seed")
 def train_step(model, batch, loss, opt, optype="train"):
     # Batch is a slice of the dataset, each sample consists of ('path to audio file', one_hot_class)
     # For each audio file in the batch, generate series of spectrograms that correspond to it.
-    data_x, data_y = preprocessing.create_batch2(batch)
+    data_x, data_y = preprocessing.create_batch_2(pd.DataFrame(batch, columns = ['File path', 'Raga', 'Raga One-Hot']))
 
     with tf.GradientTape() as tape:
         for i in range(0, len(data_x)):
@@ -74,7 +74,7 @@ def main():
     #print(len(list_df), len(list_train), len(list_val), len(list_test))
 
     #create 1 batch to get correct IMAGE_LEN, IMAGE_WIDTH
-    temp_x, temp_y = preprocessing.create_batch2(list_train[0])
+    temp_x, temp_y = preprocessing.create_batch_2(pd.DataFrame(list_train[0], columns = ['File path', 'Raga', 'Raga One-Hot']))
     IMAGE_LEN = temp_x[0].shape[0]
     IMAGE_WIDTH = temp_x[0].shape[1]
     NUM_RAGAS = temp_y[0].shape[0]
@@ -92,7 +92,7 @@ def main():
     # Initialize Checkpoint dir and manager
     checkpt_dr = './tmp/training_checkpts'
     checkpt = tf.train.Checkpoint(optimizer = opt, model = model)
-    status = checkpoint.restore(tf.train.latest_checkpoint(checkpt_dr))
+    status = checkpt.restore(tf.train.latest_checkpoint(checkpt_dr))
 
     #avg epoch losses
     epochlosses = []

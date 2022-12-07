@@ -236,7 +236,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
             chroma = librosa.feature.chroma_stft(y=S, sr=sr)
             # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
             chromas.append(chroma)
-   
+
         # Add data to batch
         batch_x_mels.extend(mels)
         batch_x_chromas.extend(chromas)
@@ -245,7 +245,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         print(f'Elapsed: {round(time.time() - t, 2)}')
 
     if use_chroma:
-        return {"mels": batch_x_mels, "chromas": batch_x_chromas}, batch_y 
+        return {"mels": batch_x_mels, "chromas": batch_x_chromas}, batch_y
     else:
         return batch_x_mels, batch_y
 
@@ -264,6 +264,9 @@ def plot_chroma(signal, sampling_rate):
 
 
 def main():
+    dirs = ['15raag/raga-data/Yaman/']
+    wavconv(dirs)
+    '''
     testing_stream = False
 
     data, encoder = generate_dataset()
@@ -313,7 +316,7 @@ def main():
     # plot_spec(mel_sgram, sr)
     #y, sr = librosa.load(testing_wav, sr=None)
     #plot_chroma(y, sr)
-    '''
+
     print(y.shape, sr)
     D = to_decibles(y)
     print(D)

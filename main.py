@@ -27,7 +27,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 FLAGS = flags.FLAGS
 flags.DEFINE_float("lr", 0.1, "Learning Rate")
 flags.DEFINE_integer("epochs", 5, "Number of epochs")
-flags.DEFINE_integer("batch_size", 4, "Num Audio files in a batch")
+flags.DEFINE_integer("batch_size", 15, "Num Audio files in a batch")
 flags.DEFINE_string("ds_path", "./15raag/raga-data/", "Path to dataset")
 flags.DEFINE_integer("rand", 31415, "random seed")
 

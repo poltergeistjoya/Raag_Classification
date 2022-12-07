@@ -207,12 +207,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         blocks = []
 
         for i, y_block in enumerate(stream):
-<<<<<<< HEAD
-            print(i, end = ' ')
 
-=======
-            # print(i, end = ' ')
->>>>>>> 739ec47055ac83677a78e177d7a9e9e9851366f2
             m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
                                                     n_fft=n_fft,
                                                     hop_length=2048,
@@ -221,22 +216,6 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
             # Forget all this, load in the entire file, and then split it up and take chromas from there!
             if use_chroma:
-<<<<<<< HEAD
-                if (i % 4 == 0) and (i != 0):
-                    input = np.concatenate( blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
-                    chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
-                    #S = np.abs(librosa.stft(y_block, n_fft=n_fft))**2
-                    #chroma = librosa.feature.chroma_stft(y=S, sr=sr)
-                    chromas.append(chroma)
-                    blocks = y_block
-                    print("Here!")
-                    blocks = []
-                    blocks.append(y_block)
-                else:
-                    blocks.append(y_block)
-
-
-=======
                 blocks.append(y_block)
 
         if use_chroma:
@@ -246,7 +225,6 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
             # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
             chromas.append(chroma)
    
->>>>>>> 739ec47055ac83677a78e177d7a9e9e9851366f2
         # Add data to batch
         batch_x_mels.extend(mels)
         batch_x_chromas.extend(chromas)
@@ -255,11 +233,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         print(f'Elapsed: {round(time.time() - t, 2)}')
 
     if use_chroma:
-<<<<<<< HEAD
-        return {"mels": batch_x_mels, "chromas": batc_x_chromas}, batch_y
-=======
         return {"mels": batch_x_mels, "chromas": batch_x_chromas}, batch_y 
->>>>>>> 739ec47055ac83677a78e177d7a9e9e9851366f2
     else:
         return batch_x_mels, batch_y
 

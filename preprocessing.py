@@ -173,17 +173,16 @@ def create_batch(dataset):
 
     return batch_x, batch_y
 
-def create_batch_2(dataset):
+def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
     At runtime, this function will be called periodically to retrieve the next batch of audio data.
 
-    Process:
-        - Slice the audio file into 30s chunks
-        - Take the STFT of each chunk and pair it with the corresponding class
-        - Return list spectrogram, one hot encoded pairs
+    Parameters:
+        - n_fft = FFT window size # https://github.com/librosa/librosa/issues/1194
     '''
-    batch_x = []
+    batch_x_mels = []
+    batc_x_chromas = []
     batch_y = []
 
     dataset = dataset.reset_index()
@@ -201,24 +200,46 @@ def create_batch_2(dataset):
                             block_length=256,
                             frame_length=2048,
                             hop_length=2048)
-
+        print(stream)
         mels = []
-        for y_block in stream:
+        chromas = []
+        blocks = []
+        for i, y_block in enumerate(stream):
+            print(i, end = ' ')
+            
             m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
-                                                    n_fft=2048,
+                                                    n_fft=n_fft,
                                                     hop_length=2048,
                                                     center=False)
             mels.append(m_block)
+            
+            # Forget all this, load in the entire file, and then split it up and take chromas from there! 
+            if use_chroma:
+                if (i % 4 == 0) and (i != 0):
+                    input = np.concatenate( blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
+                    chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
+                    #S = np.abs(librosa.stft(y_block, n_fft=n_fft))**2
+                    #chroma = librosa.feature.chroma_stft(y=S, sr=sr)
+                    chromas.append(chroma)
+                    blocks = y_block
+                    print("Here!")
+                    blocks = [] 
+                    blocks.append(y_block)
+                else: 
+                    blocks.append(y_block)
 
 
         # Add data to batch
-        batch_x.extend(mels)
+        batch_x_mels.extend(mels)
+        batc_x_chromas.extend(chromas)
         batch_y.extend([audiofile['Raga One-Hot'] for i in range(len(mels))])
 
         print(f'Elapsed: {round(time.time() - t, 2)}')
 
-
-    return batch_x, batch_y
+    if use_chroma:
+        return {"mels": batch_x_mels, "chromas": batc_x_chromas}, batch_y 
+    else:
+        return batch_x_mels, batch_y
 
 def plot_chroma(signal, sampling_rate):
     S = np.abs(librosa.stft(y, n_fft=4096))**2
@@ -241,10 +262,12 @@ def main():
     data, encoder = generate_dataset()
     print(data)
     print()
-    x, y = create_batch_2(data.iloc[0:10])
-    print(x[0])
+    x, y = create_batch_2(data.iloc[0:10], use_chroma = True)
+    print(x['mels'][0])
+    print(x['chromas'][0])
     print(y[0])
-    print(len(x), len(y))
+    print(len(x['mels']), len(x['chromas']), len(y))
+    print(x['chromas'][0].shape, x['chromas'][78].shape)
 
     if testing_stream:
         filename1 = 'raga-data\Bageshree\C R Vyas - Raga Bageshri & Chandrakauns.mp3'

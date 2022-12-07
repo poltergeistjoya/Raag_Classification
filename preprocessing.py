@@ -173,6 +173,7 @@ def create_batch(dataset):
 
     return batch_x, batch_y
 
+@memory.cache()
 def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
     '''
     To conserve memory, the dataset will only consist of a list of filenames and the raga they correspond too.
@@ -189,12 +190,12 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
     duration = 30.0
     target_sr = 8000
     target_size = duration * target_sr
-    
+
     for index, audiofile in dataset.iterrows():
         t = time.time()
         filename = audiofile['File path']
         file_length = round(librosa.get_duration(filename = audiofile['File path']), 0)
-        
+
         sr = librosa.get_samplerate(filename)
         stream = librosa.stream(filename,
                             block_length=256,
@@ -206,14 +207,14 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         blocks = []
         for i, y_block in enumerate(stream):
             print(i, end = ' ')
-            
+
             m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
                                                     n_fft=n_fft,
                                                     hop_length=2048,
                                                     center=False)
             mels.append(m_block)
-            
-            # Forget all this, load in the entire file, and then split it up and take chromas from there! 
+
+            # Forget all this, load in the entire file, and then split it up and take chromas from there!
             if use_chroma:
                 if (i % 4 == 0) and (i != 0):
                     input = np.concatenate( blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
@@ -223,9 +224,9 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
                     chromas.append(chroma)
                     blocks = y_block
                     print("Here!")
-                    blocks = [] 
+                    blocks = []
                     blocks.append(y_block)
-                else: 
+                else:
                     blocks.append(y_block)
 
 
@@ -237,7 +238,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         print(f'Elapsed: {round(time.time() - t, 2)}')
 
     if use_chroma:
-        return {"mels": batch_x_mels, "chromas": batc_x_chromas}, batch_y 
+        return {"mels": batch_x_mels, "chromas": batc_x_chromas}, batch_y
     else:
         return batch_x_mels, batch_y
 
@@ -257,7 +258,7 @@ def plot_chroma(signal, sampling_rate):
 
 def main():
     testing_stream = False
-    
+
 
     data, encoder = generate_dataset()
     print(data)
@@ -296,7 +297,7 @@ def main():
         plt.colorbar(format='%+2.0f dB')
         plt.show()
 
-    # plot_spec(mel_sgram, sr)    
+    # plot_spec(mel_sgram, sr)
     #y, sr = librosa.load(testing_wav, sr=None)
     #plot_chroma(y, sr)
     '''

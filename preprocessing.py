@@ -232,7 +232,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
         if use_chroma:
             input = np.concatenate(blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
-            S = np.abs(librosa.stft(input, sr = sr, n_fft=4096))**2
+            S = np.abs(librosa.stft(input, sr = sr, n_fft=4096, center = False)) ** 2
             chroma = librosa.feature.chroma_stft(y=S, sr=sr)
             # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
             chromas.append(chroma)
@@ -251,7 +251,6 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
 def plot_chroma(signal, sampling_rate):
     S = np.abs(librosa.stft(y, n_fft=4096))**2
-
     chroma = librosa.feature.chroma_stft(y=S, sr=sampling_rate)
     fig, ax = plt.subplots(nrows=2, sharex=True)
     img = librosa.display.specshow(librosa.amplitude_to_db(S, ref=np.max),
@@ -262,6 +261,15 @@ def plot_chroma(signal, sampling_rate):
     #fig.colorbar(img, ax=[ax[1]])
     plt.show()
 
+    def output_2_rankings(logits, encoder, num_display = 5):
+        indices = (-sample2).argsort()[:len(logits)]
+        for i, index in enumerate(indices):
+            one_hot = np.zeros(23)
+            one_hot[index] = 1
+            print(encoder.inverse_transform(one_hot.reshape(1, -1))[0][0], sample2[index])
+
+            if i == 5:
+                break
 
 def main():
     dirs = ['15raag/raga-data/Yaman/']

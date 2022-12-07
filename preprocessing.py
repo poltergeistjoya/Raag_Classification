@@ -262,11 +262,11 @@ def plot_chroma(signal, sampling_rate):
     plt.show()
 
     def output_2_rankings(logits, encoder, num_display = 5):
-        indices = (-sample2).argsort()[:len(logits)]
+        indices = (-logits).argsort()[:len(logits)]
         for i, index in enumerate(indices):
             one_hot = np.zeros(23)
             one_hot[index] = 1
-            print(encoder.inverse_transform(one_hot.reshape(1, -1))[0][0], sample2[index])
+            print(encoder.inverse_transform(one_hot.reshape(1, -1))[0][0], logits[index])
 
             if i == 5:
                 break

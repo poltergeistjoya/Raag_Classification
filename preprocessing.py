@@ -182,7 +182,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         - n_fft = FFT window size # https://github.com/librosa/librosa/issues/1194
     '''
     batch_x_mels = []
-    batc_x_chromas = []
+    batch_x_chromas = []
     batch_y = []
 
     dataset = dataset.reset_index()
@@ -200,13 +200,13 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
                             block_length=256,
                             frame_length=2048,
                             hop_length=2048)
-        print(stream)
+        # print(stream)
         mels = []
         chromas = []
         blocks = []
+
         for i, y_block in enumerate(stream):
-            print(i, end = ' ')
-            
+            # print(i, end = ' ')
             m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
                                                     n_fft=n_fft,
                                                     hop_length=2048,
@@ -215,29 +215,24 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
             
             # Forget all this, load in the entire file, and then split it up and take chromas from there! 
             if use_chroma:
-                if (i % 4 == 0) and (i != 0):
-                    input = np.concatenate( blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
-                    chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
-                    #S = np.abs(librosa.stft(y_block, n_fft=n_fft))**2
-                    #chroma = librosa.feature.chroma_stft(y=S, sr=sr)
-                    chromas.append(chroma)
-                    blocks = y_block
-                    print("Here!")
-                    blocks = [] 
-                    blocks.append(y_block)
-                else: 
-                    blocks.append(y_block)
+                blocks.append(y_block)
 
-
+        if use_chroma:
+            input = np.concatenate(blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
+            S = np.abs(librosa.stft(input, n_fft=4096))**2
+            chroma = librosa.feature.chroma_stft(y=S, sr=sr)
+            # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
+            chromas.append(chroma)
+   
         # Add data to batch
         batch_x_mels.extend(mels)
-        batc_x_chromas.extend(chromas)
+        batch_x_chromas.extend(chromas)
         batch_y.extend([audiofile['Raga One-Hot'] for i in range(len(mels))])
 
         print(f'Elapsed: {round(time.time() - t, 2)}')
 
     if use_chroma:
-        return {"mels": batch_x_mels, "chromas": batc_x_chromas}, batch_y 
+        return {"mels": batch_x_mels, "chromas": batch_x_chromas}, batch_y 
     else:
         return batch_x_mels, batch_y
 

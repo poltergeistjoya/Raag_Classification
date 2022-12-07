@@ -188,7 +188,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
     dataset = dataset.reset_index()
     duration = 30.0
-    target_sr = 8000
+    target_sr = 44100
     target_size = duration * target_sr
 
     for index, audiofile in dataset.iterrows():
@@ -198,20 +198,32 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
         sr = librosa.get_samplerate(filename)
         stream = librosa.stream(filename,
-                            block_length=256,
-                            frame_length=2048,
-                            hop_length=2048)
+                            block_length = 512,     # Num frames in block (want a total time per block of ~ 512*2048 * (1/44100) = 23.77 seconds)
+                            frame_length = 2048,    # Num samples in frame 
+                            hop_length = 2048,      # Num samples to advance between frames 
+                            fill_value = 0
+        # Note that at the end of the file, there may not be enough data to fill an entire block, resulting in a shorter block by default. 
+        # To pad the signal out so that blocks are always full length, set fill_value (see below).
+        )
+
         # print(stream)
         mels = []
         chromas = []
         blocks = []
 
         for i, y_block in enumerate(stream):
+            # Compute mel spectrogram over stream, using a shorter frame and non-overlapping windows
+            m_block = librosa.feature.melspectrogram(y = y_block, 
+                                                    sr = sr,              # sampling rate of y 
+                                                    n_fft = n_fft,        # length of the FFT window
+                                                    hop_length = 1024,    # number of samples between successive frames
+                                                    center = False
+            # By default, most librosa analyses (e.g., short-time Fourier transform) assume centered frames, which requires 
+            # padding the signal at the beginning and end. This will not work correctly when the signal is carved into blocks, 
+            # because it would introduce padding in the middle of the signal. To disable this feature, use center=False in all 
+            # frame-based analyses.
+            )
 
-            m_block = librosa.feature.melspectrogram(y=y_block, sr=sr,
-                                                    n_fft=n_fft,
-                                                    hop_length=2048,
-                                                    center=False)
             mels.append(m_block)
 
             # Forget all this, load in the entire file, and then split it up and take chromas from there!
@@ -220,7 +232,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
         if use_chroma:
             input = np.concatenate(blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
-            S = np.abs(librosa.stft(input, n_fft=4096))**2
+            S = np.abs(librosa.stft(input, sr = sr, n_fft=4096))**2
             chroma = librosa.feature.chroma_stft(y=S, sr=sr)
             # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
             chromas.append(chroma)
@@ -254,16 +266,22 @@ def plot_chroma(signal, sampling_rate):
 def main():
     testing_stream = False
 
-
     data, encoder = generate_dataset()
-    print(data)
-    print()
-    x, y = create_batch_2(data.iloc[0:10], use_chroma = True)
-    print(x['mels'][0])
-    print(x['chromas'][0])
-    print(y[0])
-    print(len(x['mels']), len(x['chromas']), len(y))
-    print(x['chromas'][0].shape, x['chromas'][78].shape)
+    x_2, y_2 = create_batch_2(data.iloc[0:6], use_chroma = False)
+    for i in range(6):
+        print(x_2[i].shape)
+
+    print(x_2[348].shape)
+    print(len(x_2))
+    if False:
+        print(data)
+        print()
+        x, y = create_batch_2(data.iloc[0:10], use_chroma = True)
+        print(x['mels'][0])
+        print(x['chromas'][0])
+        print(y[0])
+        print(len(x['mels']), len(x['chromas']), len(y))
+        print(x['chromas'][0].shape, x['chromas'][78].shape)
 
     if testing_stream:
         filename1 = 'raga-data\Bageshree\C R Vyas - Raga Bageshri & Chandrakauns.mp3'

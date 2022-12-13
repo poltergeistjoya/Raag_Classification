@@ -74,6 +74,48 @@ def simple_model(image_len, image_width, num_classes, lambda_val):
 
   return model
 
+@memory.cache()
+def VGG16(image_len, image_width, num_classes, lambda_val = 0.1):
+    # Original Paper: https://arxiv.org/pdf/1409.1556.pdf
+    # https://towardsdatascience.com/step-by-step-vgg16-implementation-in-keras-for-beginners-a833c686ae6c
+    # Kernel Reg - https://towardsdatascience.com/regularization-techniques-and-their-implementation-in-tensorflow-keras-c06e7551e709
+
+    inputShape = (image_len, image_width, 1)
+    inputs = Input(shape=inputShape)
+
+    output = Conv2D(filters = 64, kernel_size = (3, 3), padding = "same", activation = 'relu')(inputs)
+    output = Conv2D(filters = 64, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+
+    output = Conv2D(filters = 128, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 128, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+
+    output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+
+
+    output = Flatten()(output)
+    output = Dense(units = 4096, activation='relu', kernel_regularizer = l2(lambda_val))(output)
+    output = Dense(units = 4096, activation='relu', kernel_regularizer = l2(lambda_val))(output)
+    output = Dense(units = num_classes, activation = 'softmax')(output)
+
+    model = Model(inputs, output, name="VGG_16")
+
+    return model
+
 if __name__ == "__main__":
     variable_learning_rate=ReduceLROnPlateau(monitor='val_loss',factor=0.2,patience=2)
 

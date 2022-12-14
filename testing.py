@@ -72,8 +72,10 @@ def main():
             #new_row = pd.DataFrame(row.to_numpy(), columns = ['File path', 'Raga', 'Raga One-Hot'])
             # print(new_row, type(new_row))
             data_x, data_y = preprocessing.create_batch_2(new_row)
-            slice_pred = []
-            slice_loss = []
+
+            slice_pred = []                                                                                                 
+            slice_loss = []        
+            
             for j in range(0, len(data_x)):
                 # print('Hello')
                 prediction = model2(np.expand_dims(np.expand_dims(data_x[j], axis = 2), axis=0))
@@ -81,11 +83,13 @@ def main():
                 slice_pred.append(prediction.numpy()[0])
                 slice_loss.append(loss_value)
 
+
             # print(slice_pred)
             print("="*50)
             testing = np.mean(np.array(slice_pred), axis = 0)
             print(new_row['Raga'], end = ' ')
             print(output_2_rankings(testing, enc, num_display = 5))
+
 
             # print(output_2_rankings(prediction.numpy()[0], enc, num_display = 0), loss_value)
             # print(loss_value, type(loss_value))

@@ -74,12 +74,14 @@ def generate_dataset(dataset_path = "./raga-data"):
         - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version
         of the raga names
         - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
-    '''
+    ''' 
     raga_dict = dict()
     raga_directories = next(os.walk(dataset_path))[1]
 
     for raga_directory in raga_directories:
         recordings_path = os.path.join(dataset_path, raga_directory)
+        if len([entry for entry in os.listdir(recordings_path) if os.path.isfile(os.path.join(recordings_path, entry))]) <= 1:
+            print(f"Skipping raga: {raga_directory}, not enough data")
         filenames = [os.path.join(recordings_path, x).replace("\\","/") for x in next(os.walk(recordings_path), (None, None, []))[2]]
         raga_dict[raga_directory] = filenames
 
@@ -232,7 +234,7 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
         if use_chroma:
             input = np.concatenate(blocks, axis=0 )    # https://stackoverflow.com/questions/27516849/how-to-convert-list-of-numpy-arrays-into-single-numpy-array
-            S = np.abs(librosa.stft(input, sr = sr, n_fft=4096, center = False)) ** 2
+            S = np.abs(librosa.stft(input, n_fft=4096, center = False)) ** 2    # TOok out sr param
             chroma = librosa.feature.chroma_stft(y=S, sr=sr)
             # chroma = librosa.feature.chroma_cqt(y=input, sr=sr)
             chromas.append(chroma)
@@ -272,8 +274,18 @@ def plot_chroma(signal, sampling_rate):
                 break
 
 def main():
-    dirs = ['15raag/raga-data/Yaman/']
-    wavconv(dirs)
+    data, enc = generate_dataset()
+    data = data.sample(frac = 1)
+    print(data.iloc[0:6])
+    x_2, y_2 = create_batch_2(data.iloc[0:6], use_chroma = True)
+    for i in range(6):
+        print(x_2[i]["chromas"].shape)
+
+    #print(x_2[348]["chromas"].shape)
+    #print(len(x_2))
+
+    # dirs = ['15raag/raga-data/Yaman/']
+    # wavconv(dirs)
     '''
     testing_stream = False
 

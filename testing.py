@@ -64,14 +64,31 @@ def main():
     status = checkpt.restore(tf.train.latest_checkpoint(checkpt_dr))
     status.expect_partial()
 
+
     # print('Hello')
     for i, batch in enumerate(iter(list_test)):
-        data_x, data_y = preprocessing.create_batch_2(pd.DataFrame(batch, columns = ['File path', 'Raga', 'Raga One-Hot']))
-        for j in range(0, len(data_x)):
-            # print('Hello')
-            prediction = model2(np.expand_dims(np.expand_dims(data_x[j], axis = 2), axis=0))
-            loss_value = loss(np.expand_dims(data_y[j], axis =1).T, prediction)
-            print(output_2_rankings(prediction.numpy()[0], enc, num_display = 0), loss_value)
+        batch = batch.reset_index(drop=True)
+        print(batch)
+        for index, row in batch.iterrows():
+            new_row = batch.iloc[[index]]
+            #new_row = pd.DataFrame(row.to_numpy(), columns = ['File path', 'Raga', 'Raga One-Hot'])
+            # print(new_row, type(new_row))
+            data_x, data_y = preprocessing.create_batch_2(new_row)
+            slice_pred = []                                                                                                 
+            slice_loss = []        
+            for j in range(0, len(data_x)):
+                # print('Hello')
+                prediction = model2(np.expand_dims(np.expand_dims(data_x[j], axis = 2), axis=0))
+                loss_value = loss(np.expand_dims(data_y[j], axis =1).T, prediction)
+                slice_pred.append(prediction.numpy()[0])
+                slice_loss.append(loss_value)
+            
+            # print(slice_pred)
+            print("="*50)
+            testing = np.mean(np.array(slice_pred), axis = 0)
+            print(output_2_rankings(testing, enc, num_display = 0))
+
+            # print(output_2_rankings(prediction.numpy()[0], enc, num_display = 0), loss_value)
             # print(loss_value, type(loss_value))
 
     # print('end')

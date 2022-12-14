@@ -26,9 +26,9 @@ import models
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 FLAGS = flags.FLAGS
 flags.DEFINE_float("lr", 0.1, "Learning Rate")
-flags.DEFINE_integer("epochs", 5, "Number of epochs")
-flags.DEFINE_integer("batch_size", 15, "Num Audio files in a batch")
-flags.DEFINE_string("ds_path", "./15raag/raga-data/", "Path to dataset")
+flags.DEFINE_integer("epochs", 9, "Number of epochs")
+flags.DEFINE_integer("batch_size", 6, "Num Audio files in a batch")
+flags.DEFINE_string("ds_path", "./15raag/raga-data/10raags/", "Path to dataset")
 flags.DEFINE_integer("rand", 31415, "random seed")
 
 
@@ -70,7 +70,7 @@ def main():
     list_df = [df[i:i+BATCH_SIZE] for i in range(0,df.shape[0],BATCH_SIZE)]
 
     # Split the list into train, test, val
-    list_train, list_val, list_test = np.split(list_df, [int(len(list_df)*0.8), int(len(list_df)*0.9)])
+    list_train, list_test = np.split(list_df, [int(len(list_df)*0.8)])
     #print(len(list_df), len(list_train), len(list_val), len(list_test))
 
     #create 1 batch to get correct IMAGE_LEN, IMAGE_WIDTH
@@ -90,7 +90,7 @@ def main():
     cce = tf.keras.losses.CategoricalCrossentropy()
 
     # Initialize Checkpoint dir and manager
-    checkpt_dr = './tmp/training_checkpts'
+    checkpt_dr = './10raagsckpt/'
     checkpt = tf.train.Checkpoint(optimizer = opt, model = model)
     status = checkpt.restore(tf.train.latest_checkpoint(checkpt_dr))
 
@@ -110,8 +110,9 @@ def main():
         avg = np.mean(losses)
         epochlosses.append(avg)
         print(f"Average loss for epoch {epoch}/{EPOCHS}: {avg}")
-        checkpt_pre = os.path.join(checkpt_dr, str(epoch))
-        checkpt.save(file_prefix=checkpt_pre)
+        if(epoch%3 ==0):
+            checkpt_pre = os.path.join(checkpt_dr, str(epoch))
+            checkpt.save(file_prefix=checkpt_pre)
 
 
     #add validation step w train_step

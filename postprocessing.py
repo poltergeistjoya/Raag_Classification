@@ -1,4 +1,4 @@
-import tabulate
+#import tabulate
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ from joblib import Memory
 def output_2_rankings(logits, encoder, num_display = 5):
     indices = (-logits).argsort()[:len(logits)]
     for i, index in enumerate(indices):
-        one_hot = np.zeros(23)
+        one_hot = np.zeros(10)
         one_hot[index] = 1
         print(encoder.inverse_transform(one_hot.reshape(1, -1))[0][0], logits[index], end = " || ")
 

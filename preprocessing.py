@@ -74,7 +74,7 @@ def generate_dataset(dataset_path = "./raga-data"):
         - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version
         of the raga names
         - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
-    ''' 
+    '''
     raga_dict = dict()
     raga_directories = next(os.walk(dataset_path))[1]
 
@@ -201,10 +201,10 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
         sr = librosa.get_samplerate(filename)
         stream = librosa.stream(filename,
                             block_length = 512,     # Num frames in block (want a total time per block of ~ 512*2048 * (1/44100) = 23.77 seconds)
-                            frame_length = 2048,    # Num samples in frame 
-                            hop_length = 2048,      # Num samples to advance between frames 
+                            frame_length = 2048,    # Num samples in frame
+                            hop_length = 2048,      # Num samples to advance between frames
                             fill_value = 0
-        # Note that at the end of the file, there may not be enough data to fill an entire block, resulting in a shorter block by default. 
+        # Note that at the end of the file, there may not be enough data to fill an entire block, resulting in a shorter block by default.
         # To pad the signal out so that blocks are always full length, set fill_value (see below).
         )
 
@@ -215,14 +215,14 @@ def create_batch_2(dataset, use_chroma = False, n_fft = 2048):
 
         for i, y_block in enumerate(stream):
             # Compute mel spectrogram over stream, using a shorter frame and non-overlapping windows
-            m_block = librosa.feature.melspectrogram(y = y_block, 
-                                                    sr = sr,              # sampling rate of y 
+            m_block = librosa.feature.melspectrogram(y = y_block,
+                                                    sr = sr,              # sampling rate of y
                                                     n_fft = n_fft,        # length of the FFT window
                                                     hop_length = 1024,    # number of samples between successive frames
                                                     center = False
-            # By default, most librosa analyses (e.g., short-time Fourier transform) assume centered frames, which requires 
-            # padding the signal at the beginning and end. This will not work correctly when the signal is carved into blocks, 
-            # because it would introduce padding in the middle of the signal. To disable this feature, use center=False in all 
+            # By default, most librosa analyses (e.g., short-time Fourier transform) assume centered frames, which requires
+            # padding the signal at the beginning and end. This will not work correctly when the signal is carved into blocks,
+            # because it would introduce padding in the middle of the signal. To disable this feature, use center=False in all
             # frame-based analyses.
             )
 
@@ -274,6 +274,7 @@ def plot_chroma(signal, sampling_rate):
                 break
 
 def main():
+    '''
     data, enc = generate_dataset()
     data = data.sample(frac = 1)
     print(data.iloc[0:6])
@@ -286,6 +287,10 @@ def main():
 
     # dirs = ['15raag/raga-data/Yaman/']
     # wavconv(dirs)
+    '''
+    dirs = ["15raag/raga-data/10raags/Puriya dhanashree/"]
+
+    wavconv(dirs)
     '''
     testing_stream = False
 

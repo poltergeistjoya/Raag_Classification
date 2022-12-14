@@ -85,26 +85,26 @@ def VGG16(image_len, image_width, num_classes, lambda_val = 0.1):
 
     output = Conv2D(filters = 64, kernel_size = (3, 3), padding = "same", activation = 'relu')(inputs)
     output = Conv2D(filters = 64, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
-    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)
 
     output = Conv2D(filters = 128, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 128, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
-    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)
 
     output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 256, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
-    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)
 
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
-    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)
 
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
     output = Conv2D(filters = 512, kernel_size = (3, 3), padding = "same", activation = 'relu')(output)
-    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)  
+    output = MaxPool2D(pool_size=(2,2), strides = (2,2))(output)
 
 
     output = Flatten()(output)

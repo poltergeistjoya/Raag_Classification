@@ -69,22 +69,17 @@ def create_raag_data(common_name = 'Khamaj', destination = './raga-data/Khamaj',
 
 if __name__ == "__main__":
     # query_raga()
-    ragas = [{'uuid': '007a5094-e226-41d0-b626-0f938f7e67e0', 'common_name': 'Shudh maaru', 'name': 'Śuddh mārū'},
-            {'uuid': 'f95072ad-729d-49b7-8ec0-c5be64337395', 'common_name': 'Shudha basant', 'name': 'Śuddh basant'},
-            {'uuid': 'cadee83a-6aaa-404c-8a68-1250dc62d320', 'common_name': 'Shyam kalyan', 'name': 'Śyām kalyāṇ'},
-            {'uuid': '7fad8e4e-8ba2-402d-9d01-6586acc5b458', 'common_name': 'Sindhu bhairavi', 'name': 'Sindhu bhairavi'},
-            {'uuid': '7e1db214-c0f2-4e68-b748-35ea464c1b39', 'common_name': 'Sindhura', 'name': 'Sindhūra'},
-            {'uuid': '3b18e6fe-5ea0-4326-8d3d-c1fbcbe1cc9e', 'common_name': 'Sohini', 'name': 'Sōhinī'},
-            {'uuid': '7f8cd8d5-6dba-40f9-8f26-0c9fff6da3e2', 'common_name': 'Sohini bahar', 'name': 'Sōhinī bahār'},
-            {'uuid': '76497571-61e8-4f5a-9e26-b52715be9fd1', 'common_name': 'Sohoni bhatiyar', 'name': 'Sōhōnī bhaṭiyār'},
-            {'uuid': '72420351-7aa7-4118-9fc1-ed60de170172', 'common_name': 'Sorath', 'name': 'Sōrath'},
-            {'uuid': 'f132c2f3-90f9-4dd3-bcb2-b6f95fd234b8', 'common_name': 'Subhalakshmi', 'name': 'Śubhalakṣmi'},
-            {'uuid': '3800077c-9fd5-46e8-ab7b-d86955a864f1', 'common_name': 'Sughrai', 'name': 'Sugharaī'},
-            {'uuid': 'faa182a5-687f-4c12-8ef7-616c537e10b0', 'common_name': 'Suha', 'name': 'Suhā'},
-            {'uuid': '17a7b583-71b9-4d75-a881-7dd5d2627b37', 'common_name': 'Suha sugharai', 'name': 'Sur sugharai'},
-            {'uuid': '6bb4b24a-deb0-4a47-b99a-094ca9605d45', 'common_name': 'Surmalhar', 'name': 'Sur malhār'},
-            {'uuid': 'd7ebeced-2c40-4188-9556-907392a9df9b', 'common_name': 'Swarashtram', 'name': 'Saurāṣṭram'},
-            {'uuid': '214aa9c2-b69b-4431-aaa4-1ad935e54334', 'common_name': 'Tankeshri', 'name': 'Tankēśrī'},
-            {'uuid': '45528063-4723-4522-8a8c-e5b1da747112', 'common_name': 'Tilak bihari', 'name': 'Tilak bihārī'}]
+    ragas = [{'uuid': '7e9ac165-68bd-4e6d-b1c0-b8d2f18ce3c3', 'common_name': 'Mangal bhairav', 'name': 'Maṅgal bhairav'},
+            {'uuid': '54c4214c-05b9-4acc-8f77-6d5786e43a2e', 'common_name': 'Marubihag', 'name': 'Mārūbihāg'},
+            {'uuid': '3eb7ba30-4b94-432e-9618-875ee57e01ab', 'common_name': 'Marwa', 'name': 'Mārvā'},
+            {'uuid': '0437cc3e-6e02-491f-aa9b-5b4e1fec8993', 'common_name': 'Marwashri marwa', 'name': 'Mārvāśrī mārvā'},
+            {'uuid': '86599528-c95a-441d-82dc-eb3ec5657045', 'common_name': 'Meera malhar', 'name': 'Mīrā malhār'},
+            {'uuid': 'cd0f0430-a499-4f38-8d50-adf3435cf1e3', 'common_name': 'Megh', 'name': 'Mēgh'},
+            {'uuid': '7acd42d8-e5ad-4cff-9a1f-61157eafb10b', 'common_name': 'Megh malhar', 'name': 'Mēgh malahār'},
+            {'uuid': 'd205eaa9-079e-4e0f-8ae4-8db8ae231c12', 'common_name': 'Mishra gaara', 'name': 'Miśra gārā'},
+            {'uuid': '97af40c5-8537-4128-a18f-fe10d8aebdf0', 'common_name': 'Mishra kalingada', 'name': 'Miśra kaliṅgaḍā'},
+            {'uuid': '1ec5f9ec-7320-4beb-9469-18bf69655645', 'common_name': 'Mishra maand', 'name': 'Miśra māṇḍ'},
+            {'uuid': 'eedc8258-2270-4da4-b7a6-388c842ae77a', 'common_name': 'Mishra piloo', 'name': 'Miśra pīlū'}
+]
     for raga in ragas:
-        create_raag_data(common_name = raga['common_name'])
+        create_raag_data(common_name = raga['common_name'], starting_num = 0)

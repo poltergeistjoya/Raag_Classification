@@ -74,12 +74,14 @@ def generate_dataset(dataset_path = "./raga-data"):
         - df: dataframe containing the paths to each audio file, the name of the raga they correspond to, and the one-hot encoded version
         of the raga names
         - enc: the OneHotEncoder using to encode the ragas (so we can invert the process later)
-    '''
+    ''' 
     raga_dict = dict()
     raga_directories = next(os.walk(dataset_path))[1]
 
     for raga_directory in raga_directories:
         recordings_path = os.path.join(dataset_path, raga_directory)
+        if len([entry for entry in os.listdir(recordings_path) if os.path.isfile(os.path.join(recordings_path, entry))]) <= 1:
+            print(f"Skipping raga: {raga_directory}, not enough data")
         filenames = [os.path.join(recordings_path, x).replace("\\","/") for x in next(os.walk(recordings_path), (None, None, []))[2]]
         raga_dict[raga_directory] = filenames
 
@@ -272,8 +274,9 @@ def plot_chroma(signal, sampling_rate):
                 break
 
 def main():
-    dirs = ['15raag/raga-data/Yaman/']
-    wavconv(dirs)
+    data, enc = generate_dataset()
+    # dirs = ['15raag/raga-data/Yaman/']
+    # wavconv(dirs)
     '''
     testing_stream = False
 
